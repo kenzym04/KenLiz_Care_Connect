@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">KenLiz CareConnect - Admin Dashboard</div>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/register-healthworker">Register Health Worker</a></li>
+                <li><a href="/admin">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Health Workers</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Availability</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            {% for worker in healthworkers %}
+            <tr>
+                <td>{{ worker.id }}</td>
+                <td>{{ worker.name }}</td>
+                <td>{{ worker.worker_type }}</td>
+                <td>{{ worker.email }}</td>
+                <td>{{ worker.phone }}</td>
+                <td>{{ worker.availability }}</td>
+                <td>{{ worker.status }}</td>
+                <td>
+                    <a href="/update-availability/{{ worker.id }}">Update Availability</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </main>
+    <footer>
+        <p>&copy; 2024 KenLiz CareConnect. All rights reserved.</p>
+    </footer>
+</body>
+</html>
