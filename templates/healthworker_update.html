@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Health Worker Availability</title>
+</head>
+<body>
+    <h1>Update Availability for {{ healthworker.name }}</h1>
+    <form method="POST">
+        <label>Availability:</label>
+        <select name="availability">
+            <option value="Available">Available</option>
+            <option value="Full-time">Available Full-time</option>
+            <option value="Part-time">Available Part-time</option>
+            <option value="Employed">Employed</option>
+            <option value="Unavailable">Unavailable</option>
+        </select><br>
+        <button type="submit">Update</button>
+    </form>
+</body>
+</html>

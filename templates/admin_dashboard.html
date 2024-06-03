@@ -1,53 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
-    <header>
-        <div class="logo">KenLiz CareConnect - Admin Dashboard</div>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/register-healthworker">Register Health Worker</a></li>
-                <li><a href="/admin">Admin</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h1>Health Workers</h1>
-        <table>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Availability</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-            {% for worker in healthworkers %}
-            <tr>
-                <td>{{ worker.id }}</td>
-                <td>{{ worker.name }}</td>
-                <td>{{ worker.worker_type }}</td>
-                <td>{{ worker.email }}</td>
-                <td>{{ worker.phone }}</td>
-                <td>{{ worker.availability }}</td>
-                <td>{{ worker.status }}</td>
-                <td>
-                    <a href="/update-availability/{{ worker.id }}">Update Availability</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </main>
-    <footer>
-        <p>&copy; 2024 KenLiz CareConnect. All rights reserved.</p>
-    </footer>
+    <h1>Admin Dashboard</h1>
+    
+    <h2>Health Workers</h2>
+    <form method="GET" action="{{ url_for('admin_dashboard') }}">
+        <label>Filter by Location:</label>
+        <input type="text" name="location">
+        <label>Filter by Worker Type:</label>
+        <input type="text" name="worker_type">
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Location</th>
+            <th>Worker Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for worker in healthworkers %}
+        <tr>
+            <td>{{ worker.name }}</td>
+            <td>{{ worker.email }}</td>
+            <td>{{ worker.phone }}</td>
+            <td>{{ worker.address }}</td>
+            <td>{{ worker.location }}</td>
+            <td>{{ worker.worker_type }}</td>
+            <td>{{ worker.status }}</td>
+            <td>
+                <a href="{{ url_for('healthworker_update', id=worker.id) }}">Update</a> |
+                <form action="{{ url_for('delete_healthworker', id=worker.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Facilities</h2>
+    <form method="GET" action="{{ url_for('admin_dashboard') }}">
+        <label>Filter by Location:</label>
+        <input type="text" name="facility_location">
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Location</th>
+            <th>Actions</th>
+        </tr>
+        {% for facility in facilities %}
+        <tr>
+            <td>{{ facility.name }}</td>
+            <td>{{ facility.email }}</td>
+            <td>{{ facility.phone }}</td>
+            <td>{{ facility.address }}</td>
+            <td>{{ facility.location }}</td>
+            <td>
+                <form action="{{ url_for('delete_facility', id=facility.id) }}" method="post" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <a href="{{ url_for('service_application') }}">Service Applications</a> |
+    <a href="{{ url_for('chat') }}">Chat</a>
+
 </body>
 </html>

@@ -1,73 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register as Health Worker</title>
-    <link rel="stylesheet" href="static/css/style.css">
+    <title>Register Health Worker</title>
 </head>
 <body>
-    <header>
-        <div class="logo"><img src="static/images/logo.png" alt="KenLiz CareConnect"></div>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/register-healthworker">Register as Health Worker</a></li>
-                <li><a href="/register-facility">Register as Facility</a></li>
-                <li><a href="/admin">Admin</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h1>Register as a Health Worker</h1>
-        <form action="/register-healthworker" method="POST" enctype="multipart/form-data">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required><br>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required><br>
-
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone" required><br>
-
-            <label for="address">Address:</label>
-            <input type="text" id="address" name="address" required><br>
-
-            <label for="qualifications">Qualifications:</label>
-            <textarea id="qualifications" name="qualifications" required></textarea><br>
-
-            <label for="experience">Experience:</label>
-            <textarea id="experience" name="experience" required></textarea><br>
-
-            <label for="specializations">Specializations:</label>
-            <textarea id="specializations" name="specializations"></textarea><br>
-
-            <label for="availability">Availability:</label>
-            <input type="text" id="availability" name="availability" required><br>
-
-            <label for="worker_type">Worker Type:</label>
-            <input type="text" id="worker_type" name="worker_type" required><br>
-
-            <label for="status">Status:</label>
-            <input type="text" id="status" name="status" required><br>
-
-            <label for="id_number">ID Number:</label>
-            <input type="text" id="id_number" name="id_number" required><br>
-
-            <label for="cv">CV:</label>
-            <input type="file" id="cv" name="cv" required><br>
-
-            <label for="certifications">Certifications:</label>
-            <input type="file" id="certifications" name="certifications" required><br>
-
-            <label for="photo">Photo:</label>
-            <input type="file" id="photo" name="photo" required><br>
-
-            <button type="submit">Register</button>
-        </form>
-    </main>
-    <footer>
-        <p>&copy; 2024 KenLiz CareConnect. All rights reserved.</p>
-    </footer>
+    <h1>Register Health Worker</h1>
+    <form method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+        <label>Email:</label>
+        <input type="email" name="email" required><br>
+        <label>Phone:</label>
+        <input type="text" name="phone" required><br>
+        <label>Address:</label>
+        <input type="text" name="address" required><br>
+        <label>Location:</label>
+        <input type="text" name="location" required><br>
+        <label>Qualifications:</label>
+        <textarea name="qualifications" required></textarea><br>
+        <label>Experience:</label>
+        <textarea name="experience" required></textarea><br>
+        <label>Specializations:</label>
+        <textarea name="specializations"></textarea><br>
+        <label>Worker Type:</label>
+        <input type="text" name="worker_type" required><br>
+        <label>ID Number:</label>
+        <input type="text" name="id_number" required><br>
+        <label>CV:</label>
+        <input type="file" name="cv" required><br>
+        <label>Certifications:</label>
+        <input type="file" name="certifications" required><br>
+        <label>Photo:</label>
+        <input type="file" name="photo" required><br>
+        <button type="submit">Register</button>
+    </form>
 </body>
 </html>
