@@ -1,24 +1,48 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from datetime import datetime
 import os
 
 app = Flask(__name__)
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///kenliz_careconnect.db'
-app.config['SECRET_KEY'] = 'kenzym04'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['SECRET_KEY'] = 'your_secret_key'
+app.config['MAIL_SERVER'] = 'smtp.yourmailserver.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kenlizcareconnect@gmail.com'
-app.config['MAIL_PASSWORD'] = 'kenlizcareconnect24'
+app.config['MAIL_USERNAME'] = 'your_email@example.com'
+app.config['MAIL_PASSWORD'] = 'your_email_password'
 
 db = SQLAlchemy(app)
 mail = Mail(app)
 
-# Import models after initializing db to avoid circular import
-from models import HealthWorker, Facility
+class HealthWorker(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    phone = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
+    qualifications = db.Column(db.Text, nullable=False)
+    experience = db.Column(db.Text, nullable=False)
+    specializations = db.Column(db.Text, nullable=True)
+    availability = db.Column(db.String(20), nullable=False, default='Available')
+    worker_type = db.Column(db.String(50), nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='Pending')
+    id_number = db.Column(db.String(100), nullable=False)
+    cv = db.Column(db.String(100), nullable=False)
+    certifications = db.Column(db.String(200), nullable=True)
+    photo = db.Column(db.String(100), nullable=True)
+    location = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Facility(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    phone = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.String(200), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 @app.route('/')
 def index():
@@ -65,6 +89,28 @@ def register_facility():
         flash('Registration successful! Please wait for admin approval.')
         return redirect(url_for('index'))
     return render_template('register_facility.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        # This is a placeholder for user authentication. Implement your own authentication logic.
+        healthworker = HealthWorker.query.filter_by(email=email).first()
+        facility = Facility.query.filter_by(email=email).first()
+        if healthworker:
+            session['user_id'] = healthworker.id
+            session['user_type'] = 'healthworker'
+            flash('Login successful.')
+            return redirect(url_for('healthworker_dashboard', id=healthworker.id))
+        elif facility:
+            session['user_id'] = facility.id
+            session['user_type'] = 'facility'
+            flash('Login successful.')
+            return redirect(url_for('facility_dashboard', id=facility.id))
+        else:
+            flash('Invalid email or password.')
+    return render_template('login.html')
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin_dashboard():
@@ -139,6 +185,16 @@ def delete_facility(id):
     db.session.commit()
     flash('Facility deleted successfully.')
     return redirect(url_for('admin_dashboard'))
+
+@app.route('/healthworker_dashboard/<int:id>')
+def healthworker_dashboard(id):
+    healthworker = HealthWorker.query.get_or_404(id)
+    return render_template('healthworker_dashboard.html', healthworker=healthworker)
+
+@app.route('/facility_dashboard/<int:id>')
+def facility_dashboard(id):
+    facility = Facility.query.get_or_404(id)
+    return render_template('facility_dashboard.html', facility=facility)
 
 if __name__ == '__main__':
     app.run(debug=True)

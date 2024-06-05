@@ -1,85 +1,91 @@
 body {
-    font-family: Arial, sans-serif;
-    background: url('../images/background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: #333;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-}
-
-.logo img {
-    height: 50px;
-}
-
-nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-}
-
-nav ul li {
-    display: inline;
-}
-
-nav ul li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-}
-
-.hero {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 0;
     text-align: center;
-    padding: 100px 20px;
-    background: rgba(255, 255, 255, 0.7);
-    margin: 50px 0;
 }
 
-.hero h1 {
-    font-size: 3em;
+header .logo {
+    height: 50px;
+    margin-right: 20px;
+    vertical-align: middle;
+}
+
+header nav {
+    display: inline-block;
+}
+
+header nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 18px;
+}
+
+header nav a:hover {
+    text-decoration: underline;
+}
+
+.container {
+    width: 80%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #007bff;
     margin-bottom: 20px;
 }
 
-.hero p {
-    font-size: 1.5em;
+.form-group {
+    margin-bottom: 15px;
 }
 
-.about {
-    padding: 50px 20px;
-    background: rgba(255, 255, 255, 0.9);
+.form-group label {
+    font-weight: bold;
 }
 
-.team {
-    display: flex;
-    gap: 50px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.member {
-    text-align: center;
-    max-width: 300px;
-}
-
-.member img {
+.form-control {
     width: 100%;
-    height: auto;
-    border-radius: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
 }
 
-.member h3 {
-    margin-top: 20px;
-    font-size: 1.5em;
+.form-control:focus {
+    border-color: #007bff;
+    outline: none;
 }
 
-.member p {
-    font-size: 1em;
-    color: #666;
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    background-color: #007bff;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }

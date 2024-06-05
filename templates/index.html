@@ -1,120 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KenLiz CareConnect</title>
-    <link rel="stylesheet" href="static/css/style.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: url('static/images/background.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #333;
-        }
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.8);
-        }
-        .logo img {
-            height: 50px;
-        }
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 15px;
-        }
-        nav ul li {
-            display: inline;
-        }
-        nav ul li a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        .hero {
-            text-align: center;
-            padding: 100px 20px;
-            background: rgba(255, 255, 255, 0.7);
-            margin: 50px 0;
-        }
-        .hero h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        .hero p {
-            font-size: 1.5em;
-        }
-        .about {
-            padding: 50px 20px;
-            background: rgba(255, 255, 255, 0.9);
-        }
-        .team {
-            display: flex;
-            gap: 50px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        .member {
-            text-align: center;
-            max-width: 300px;
-        }
-        .member img {
-            width: 100%;
-            height: auto;
-            border-radius: 50%;
-        }
-        .member h3 {
-            margin-top: 20px;
-            font-size: 1.5em;
-        }
-        .member p {
-            font-size: 1em;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <img src="static/images/logo.png" alt="KenLiz CareConnect">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/register-healthworker">Register as Health Worker</a></li>
-                <li><a href="/register-facility">Register as Facility</a></li>
-                <li><a href="/admin">Admin</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="hero">
-            <h1>Welcome to KenLiz CareConnect</h1>
-            <p>Your trusted platform for healthcare professionals and facilities.</p>
-        </section>
-        <section class="about">
-            <h2>About Us</h2>
-            <div class="team">
-                <div class="member">
-                    <img src="mnt/data/Elizabeth.jpg" alt="Elizabeth Achieng">
-                    <h3>Elizabeth Achieng</h3>
-                    <p>CEO & Co-Founder</p>
-                    <p>Elizabeth Achieng is a certified registered caregiver with over a decade of experience in the healthcare sector. Her dedication and expertise have been instrumental in providing quality care to patients and leading healthcare teams.</p>
-                </div>
-                <div class="member">
-                    <img src="mnt/data/May_2024.jpg" alt="Eng. Ken Owiro">
-                    <h3>Eng. Ken Owiro</h3>
-                    <p>Co-founder & CTO</p>
-                    <p>Eng. Ken Owiro is an accomplished Software Development Engineer in Test (SDET) with extensive experience in software development and quality assurance. His technical skills and innovative approach drive the technological advancements at KenLiz CareConnect.</p>
-                </div>
-            </div>
-        </section>
-    </main>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Home - KenLiz CareConnect{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Welcome to KenLiz CareConnect</h1>
+    <p>Transform your home or health facility with our comprehensive care services, designed to meet the unique needs of every patient. We provide top-quality certified healthcare professionals to deliver exceptional care where it's needed most. From homes to health facilities, our services ensure that patients receive the highest standard of care and support.</p>
+
+    <p> We also offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Partner with us to enhance your career while making a difference in the lives of those you serve..</p>
+</section>
+
+<section>
+    <h2>Real-Time Chat</h2>
+    <!-- Implement your real-time chat widget here -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function() {
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/DEFAULT';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin', '*');
+            s0.parentNode.insertBefore(s1, s0);
+        })();
+    </script>
+</section>
+
+<section>
+    <h2>Reviews</h2>
+    <ul>
+        <li>Review 1: "Excellent service!" - Health Facility A</li>
+        <li>Review 2: "Professional and reliable." - Health Facility B</li>
+        <li>Review 3: "Highly recommend!" - Patient C</li>
+        <li>Review 4: "Great experience!" - Health Facility D</li>
+        <li>Review 5: "Very satisfied!" - Patient E</li>
+        <li>Review 6: "Top-notch professionals." - Health Facility F</li>
+        <li>Review 7: "Will use again." - Patient G</li>
+        <li>Review 8: "Highly professional." - Health Facility H</li>
+        <li>Review 9: "Excellent care." - Patient I</li>
+        <li>Review 10: "Reliable services." - Health Facility J</li>
+    </ul>
+</section>
+{% endblock %}

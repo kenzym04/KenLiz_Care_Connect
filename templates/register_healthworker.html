@@ -1,38 +1,78 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register Health Worker</title>
-</head>
-<body>
-    <h1>Register Health Worker</h1>
-    <form method="POST">
-        <label>Name:</label>
-        <input type="text" name="name" required><br>
-        <label>Email:</label>
-        <input type="email" name="email" required><br>
-        <label>Phone:</label>
-        <input type="text" name="phone" required><br>
-        <label>Address:</label>
-        <input type="text" name="address" required><br>
-        <label>Location:</label>
-        <input type="text" name="location" required><br>
-        <label>Qualifications:</label>
-        <textarea name="qualifications" required></textarea><br>
-        <label>Experience:</label>
-        <textarea name="experience" required></textarea><br>
-        <label>Specializations:</label>
-        <textarea name="specializations"></textarea><br>
-        <label>Worker Type:</label>
-        <input type="text" name="worker_type" required><br>
-        <label>ID Number:</label>
-        <input type="text" name="id_number" required><br>
-        <label>CV:</label>
-        <input type="file" name="cv" required><br>
-        <label>Certifications:</label>
-        <input type="file" name="certifications" required><br>
-        <label>Photo:</label>
-        <input type="file" name="photo" required><br>
-        <button type="submit">Register</button>
+{% extends "base.html" %}
+
+{% block title %}Register Health Worker{% endblock %}
+
+{% block content %}
+<div class="container" style="margin-bottom: 50px;">
+    <h2>Register as Health Worker</h2>
+    <form method="POST" action="{{ url_for('register_healthworker') }}" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+            <label for="address">Address:</label>
+            <input type="text" class="form-control" id="address" name="address" required>
+        </div>
+        <div class="form-group">
+            <label for="qualifications">Qualifications:</label>
+            <textarea class="form-control" id="qualifications" name="qualifications" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="experience">Experience:</label>
+            <textarea class="form-control" id="experience" name="experience" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="specializations">Specializations:</label>
+            <textarea class="form-control" id="specializations" name="specializations"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="worker_type">Worker Type:</label>
+            <select class="form-control" id="worker_type" name="worker_type" required>
+                <option value="Nursing Assistant/Care giver">Nursing Assistant/Care giver</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Nurse">Nurse</option>
+                <option value="Midwife">Midwife</option>
+                <option value="Clinical officer">Clinical officer</option>
+                <option value="Bio med">Bio med</option>
+                <option value="Pharmacist">Pharmacist</option>
+                <option value="Physician">Physician</option>
+                <option value="Dentist">Dentist</option>
+                <option value="Specialist/Surgeon">Specialist/Surgeon</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="id_number">ID Number:</label>
+            <input type="text" class="form-control" id="id_number" name="id_number" required>
+        </div>
+        <div class="form-group">
+            <label for="cv">CV:</label>
+            <input type="file" class="form-control" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
+        </div>
+        <div class="form-group">
+            <label for="certifications">Certifications:</label>
+            <input type="file" class="form-control" id="certifications" name="certifications" accept=".pdf,.doc,.docx">
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo:</label>
+            <input type="file" class="form-control" id="photo" name="photo" accept=".jpg,.jpeg,.png">
+        </div>
+        <div class="form-group">
+            <label for="location">Location:</label>
+            <input type="text" class="form-control" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Register</button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}
