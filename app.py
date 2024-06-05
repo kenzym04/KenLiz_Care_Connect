@@ -47,7 +47,7 @@ class Facility(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.NOW(UTC))
+    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
 
 @login_manager.user_loader
 def load_user(user_id):
