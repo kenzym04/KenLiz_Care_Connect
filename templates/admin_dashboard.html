@@ -1,82 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Admin Dashboard</title>
 </head>
 <body>
     <h1>Admin Dashboard</h1>
-    
-    <h2>Health Workers</h2>
     <form method="GET" action="{{ url_for('admin_dashboard') }}">
-        <label>Filter by Location:</label>
-        <input type="text" name="location">
-        <label>Filter by Worker Type:</label>
-        <input type="text" name="worker_type">
+        <label for="location">Filter by Location:</label>
+        <input type="text" name="location" id="location" value="{{ request.args.get('location') }}">
+        
+        <label for="worker_type">Filter by Worker Type:</label>
+        <select name="worker_type" id="worker_type">
+            <option value="">All</option>
+            <option value="Nursing Assistant/Care giver">Nursing Assistant/Care giver</option>
+            <option value="Doctor">Doctor</option>
+            <option value="Nurse">Nurse</option>
+            <option value="Midwife">Midwife</option>
+            <option value="Clinical officer">Clinical officer</option>
+            <option value="Bio med">Bio med</option>
+            <option value="Pharmacist">Pharmacist</option>
+            <option value="Physician">Physician</option>
+            <option value="Dentist">Dentist</option>
+            <option value="Specialist/Surgeon">Specialist/Surgeon</option>
+            <option value="Other">Other</option>
+        </select>
+        
+        <label for="facility_location">Filter by Facility Location:</label>
+        <input type="text" name="facility_location" id="facility_location" value="{{ request.args.get('facility_location') }}">
+        
+        <label for="task_status">Filter by Task Status:</label>
+        <select name="task_status" id="task_status">
+            <option value="">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Deployed">Deployed</option>
+        </select>
+        
         <button type="submit">Filter</button>
     </form>
+
+    <h2>Health Workers</h2>
     <table>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Location</th>
-            <th>Worker Type</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        {% for worker in healthworkers %}
-        <tr>
-            <td>{{ worker.name }}</td>
-            <td>{{ worker.email }}</td>
-            <td>{{ worker.phone }}</td>
-            <td>{{ worker.address }}</td>
-            <td>{{ worker.location }}</td>
-            <td>{{ worker.worker_type }}</td>
-            <td>{{ worker.status }}</td>
-            <td>
-                <a href="{{ url_for('healthworker_update', id=worker.id) }}">Update</a> |
-                <form action="{{ url_for('delete_healthworker', id=worker.id) }}" method="post" style="display:inline;">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Worker Type</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for hw in healthworkers %}
+            <tr>
+                <td>{{ hw.name }}</td>
+                <td>{{ hw.email }}</td>
+                <td>{{ hw.phone }}</td>
+                <td>{{ hw.location }}</td>
+                <td>{{ hw.worker_type }}</td>
+                <td>{{ hw.status }}</td>
+                <td>
+                    <a href="{{ url_for('assign_task', id=hw.id) }}">Assign Task</a>
+                    <form method="POST" action="{{ url_for('delete_healthworker', id=hw.id) }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
     <h2>Facilities</h2>
-    <form method="GET" action="{{ url_for('admin_dashboard') }}">
-        <label>Filter by Location:</label>
-        <input type="text" name="facility_location">
-        <button type="submit">Filter</button>
-    </form>
     <table>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>Location</th>
-            <th>Actions</th>
-        </tr>
-        {% for facility in facilities %}
-        <tr>
-            <td>{{ facility.name }}</td>
-            <td>{{ facility.email }}</td>
-            <td>{{ facility.phone }}</td>
-            <td>{{ facility.address }}</td>
-            <td>{{ facility.location }}</td>
-            <td>
-                <form action="{{ url_for('delete_facility', id=facility.id) }}" method="post" style="display:inline;">
-                    <button type="submit">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for facility in facilities %}
+            <tr>
+                <td>{{ facility.name }}</td>
+                <td>{{ facility.email }}</td>
+                <td>{{ facility.phone }}</td>
+                <td>{{ facility.location }}</td>
+                <td>
+                    <a href="{{ url_for('create_invoice', id=facility.id) }}">Send Invoice</a>
+                    <form method="POST" action="{{ url_for('delete_facility', id=facility.id) }}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
-
-    <a href="{{ url_for('service_application') }}">Service Applications</a> |
-    <a href="{{ url_for('chat') }}">Chat</a>
-
 </body>
 </html>

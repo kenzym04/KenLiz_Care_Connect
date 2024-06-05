@@ -22,8 +22,9 @@ class HealthWorker(db.Model):
     certifications = db.Column(db.String(200), nullable=True)
     photo = db.Column(db.String(100), nullable=True)
     location = db.Column(db.String(100), nullable=False)
-    password = db.Column(db.String(200), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    assigned_task = db.Column(db.String(20), nullable=False, default='Pending')
+    assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'), nullable=True)
 
 class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,6 +34,8 @@ class Facility(db.Model):
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    health_workers = db.relationship('HealthWorker', backref='facility', lazy=True)
+
 
    
 

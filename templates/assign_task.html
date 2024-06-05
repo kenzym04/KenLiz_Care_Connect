@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assign Task</title>
+</head>
+<body>
+    <h1>Assign Task to {{ healthworker.name }}</h1>
+    <form method="POST" action="{{ url_for('assign_task', healthworker_id=healthworker.id) }}">
+        <label for="facility_id">Select Facility:</label>
+        <select name="facility_id" id="facility_id">
+            {% for facility in facilities %}
+            <option value="{{ facility.id }}">{{ facility.name }} - {{ facility.location }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Assign</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Invoice</title>
+</head>
+<body>
+    <h1>Create Invoice for {{ facility.name }}</h1>
+    <form method="POST" action="{{ url_for('create_invoice', facility_id=facility.id) }}">
+        <label for="services">Services Provided:</label>
+        <textarea name="services" id="services" required></textarea>
+        <label for="amount">Total Amount:</label>
+        <input type="number" name="amount" id="amount" required>
+        <button type="submit">Send Invoice</button>
+    </form>
+</body>
+</html>
