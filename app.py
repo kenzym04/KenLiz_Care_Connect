@@ -37,7 +37,7 @@ class HealthWorker(UserMixin, db.Model):
     certifications = db.Column(db.String(200), nullable=True)
     photo = db.Column(db.String(100), nullable=True)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
     password = db.Column(db.String(200), nullable=False)
 
 class Facility(db.Model):
@@ -47,7 +47,7 @@ class Facility(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.NOW(UTC))
 
 @login_manager.user_loader
 def load_user(user_id):
