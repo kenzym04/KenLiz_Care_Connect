@@ -1,1 +1,16 @@
+# Ignore environment files
 .env
+
+# Ignore credentials file
+credentials.json
+
+# Other files and directories to ignore
+*.pyc
+__pycache__/
+instance/
+uploads/
+mnt/
+
+# Ignore virtual environment
+.venv/
+venv/
