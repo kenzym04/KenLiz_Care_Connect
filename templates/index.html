@@ -3,26 +3,37 @@
 {% block title %}Home - KenLiz CareConnect{% endblock %}
 
 {% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 <style>
     body {
-        font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
-        color: #333;
-        margin: 0;
-        padding: 0;
+    }
+
+    header {
+        background-color: #ff69b4; /* Pink header */
+        padding: 20px;
+        text-align: center;
     }
 
     section {
         padding: 20px;
-        margin: 20px;
+        margin: 20px 0;
         background: white;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    h1, h2 {
-        font-family: 'Helvetica', sans-serif;
+    h1 {
+        color: #f4f6f9fb;
+    }
+
+    h2 {
         color: #0056b3;
+    }
+
+    .intro-text, .career-text {
+        margin-bottom: 20px;
     }
 
     .registration-container {
@@ -46,21 +57,11 @@
     }
 
     .registration-card h3 {
-        margin-top: 0;
         color: #0056b3;
     }
 
     .btn {
-        display: inline-block;
-        padding: 10px 20px;
         margin-top: 10px;
-        border: none;
-        border-radius: 4px;
-        background: #0056b3;
-        color: white;
-        text-align: center;
-        text-decoration: none;
-        cursor: pointer;
     }
 
     .reviews {
@@ -72,7 +73,7 @@
 
     .reviews ul {
         display: flex;
-        width: calc(1 * 100%); /* Assuming there are 10 reviews */
+        width: calc(10 * 100%); /* Assuming there are 10 reviews */
         animation: slide 10s linear infinite;
     }
 
@@ -91,75 +92,192 @@
         100% { transform: translateX(-100%); }
     }
 
-    .contact-info p {
-        margin: 5px 0;
+    footer {
+        background: #0056b3;
+        color: white;
+        padding: 20px;
+        text-align: center;
     }
 
-    .chat-section {
-        margin-top: 20px;
+    footer .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    footer .social-icons a {
+        margin: 0 10px;
+        color: white;
+    }
+
+    footer .social-icons a:hover {
+        color: #ddd;
+    }
+
+    footer .footer-links {
+        margin: 20px 0;
+    }
+
+    footer .footer-links a {
+        color: white;
+        margin: 0 10px;
+    }
+
+    footer .footer-links a:hover {
+        text-decoration: underline;
+    }
+
+    footer .footer-logo img {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .chat-popup {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        display: none;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: #fafafa;
+    }
+
+    .chat-header {
+        padding: 10px;
+        background: #0056b3;
+        color: white;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        cursor: pointer;
+    }
+
+    .chat-body {
+        padding: 10px;
+    }
+
+    .chat-close {
+        float: right;
+        cursor: pointer;
     }
 </style>
 
+<header>
+    <div class="container text-center">
+        <h1>Welcome to KenLiz CareConnect</h1>
+    </div>
+</header>
+
 <section>
-    <h1>Welcome to KenLiz CareConnect</h1>
-    <p>Transform your home or health facility with our comprehensive care services, designed to meet the unique needs of every patient. We provide top-quality certified healthcare professionals to deliver exceptional care where it's needed most. From homes to health facilities, our services ensure that patients receive the highest standard of care and support.</p>
-
-    <p> We also offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Partner with us to enhance your career while making a difference in the lives of those you serve.</p>
-</section>
-
-<section class="registration-container">
-    <div class="registration-card">
-        <h3>Register as Health Worker</h3>
-        <p>Join our team of dedicated healthcare professionals.</p>
-        <a href="{{ url_for('register_healthworker') }}" class="btn">Register Now</a>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="intro-text">
+                    <p>Transform your home or health facility with our comprehensive care services, designed to meet the unique needs of every patient. We provide top-quality certified healthcare professionals to deliver exceptional care where it's needed most. From homes to health facilities, our services ensure that patients receive the highest standard of care and support.</p>
+                </div>
+                <div class="registration-card">
+                    <h3>Register a Facility</h3>
+                    <p>Partner with us to receive top-notch healthcare services.</p>
+                    <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="career-text">
+                    <p>We also offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Partner with us to enhance your career while making a difference in the lives of those you serve.</p>
+                </div>
+                <div class="registration-card">
+                    <h3>Register as Health Worker</h3>
+                    <p>Join our team of dedicated healthcare professionals.</p>
+                    <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="registration-card">
-        <h3>Register a Facility</h3>
-        <p>Partner with us to receive top-notch healthcare services.</p>
-        <a href="{{ url_for('register_facility') }}" class="btn">Register Now</a>
-    </div>
-</section>
-
-<section class="chat-section">
-    <h2>Real-Time Chat</h2>
-    <!-- Implement your real-time chat widget here -->
-    <script type="text/javascript">
-        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-        (function() {
-            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/DEFAULT';
-            s1.charset = 'UTF-8';
-            s1.setAttribute('crossorigin', '*');
-            s0.parentNode.insertBefore(s1, s0);
-        })();
-    </script>
 </section>
 
 <section class="reviews">
-    <h2>Reviews</h2>
-    <ul>
-        <li>Review 1: "Excellent service!" - Health Facility A</li>
-        <li>Review 2: "Professional and reliable." - Health Facility B</li>
-        <li>Review 3: "Highly recommend!" - Patient C</li>
-        <li>Review 4: "Great experience!" - Health Facility D</li>
-        <li>Review 5: "Very satisfied!" - Patient E</li>
-        <li>Review 6: "Top-notch professionals." - Health Facility F</li>
-        <li>Review 7: "Will use again." - Patient G</li>
-        <li>Review 8: "Highly professional." - Health Facility H</li>
-        <li>Review 9: "Excellent care." - Patient I</li>
-        <li>Review 10: "Reliable services." - Health Facility J</li>
-    </ul>
+    <div class="container">
+        <h2>Reviews</h2>
+        <ul>
+            <li>Review 1: "Excellent service!" - Health Facility A</li>
+            <li>Review 2: "Professional and reliable." - Health Facility B</li>
+            <li>Review 3: "Highly recommend!" - Patient C</li>
+            <li>Review 4: "Great experience!" - Health Facility D</li>
+            <li>Review 5: "Very satisfied!" - Patient E</li>
+            <li>Review 6: "Top-notch professionals." - Health Facility F</li>
+            <li>Review 7: "Will use again." - Patient G</li>
+            <li>Review 8: "Highly professional." - Health Facility H</li>
+            <li>Review 9: "Excellent care." - Patient I</li>
+            <li>Review 10: "Reliable services." - Health Facility J</li>
+        </ul>
+    </div>
 </section>
 
-<section class="contact-info">
-    <h2>Contact Us</h2>
-    <p>Phone: 0704026160, 0754054254, 0732250949</p>
-    <p>Email: info@kenlizcareconnect.com</p>
-    <p>WhatsApp: 0754054254</p>
-    <p>TikTok: @kenlizcareconnect</p>
-    <p>Instagram: @kenlizcareconnect</p>
-    <p>YouTube: @kenlizcareconnect</p>
-    <p>Telegram: @kenlizcareconnect</p>
-</section>
+<footer>
+    <div class="container footer-content">
+        <div class="footer-logo">
+            <img src="path/to/logo.png" alt="KenLiz CareConnect Logo">
+        </div>
+        <div class="footer-links">
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Sitemap</a> | 
+            <a href="#">Contact Us</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+    </div>
+    <div class="container text-center">
+        <p>&copy; 2024 KenLiz CareConnect, Inc.</p>
+    </div>
+</footer>
+
+<div class="chat-popup" id="chatPopup">
+    <div class="chat-header" onclick="toggleChat()">
+        Real-Time Chat <span class="chat-close" onclick="closeChat(event)">x</span>
+    </div>
+    <div class="chat-body">
+        <!-- Your real-time chat widget code here -->
+        <script type="text/javascript">
+            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+            (function() {
+                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+                s1.async = true;
+                s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/DEFAULT';
+                s1.charset = 'UTF-8';
+                s1.setAttribute('crossorigin', '*');
+                s0.parentNode.insertBefore(s1, s0);
+            })();
+        </script>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        var chatPopup = document.getElementById("chatPopup");
+        if (chatPopup.style.display === "none" || chatPopup.style.display === "") {
+            chatPopup.style.display = "block";
+        } else {
+            chatPopup.style.display = "none";
+        }
+    }
+
+    function closeChat(event) {
+        event.stopPropagation();
+        var chatPopup = document.getElementById("chatPopup");
+        chatPopup.style.display = "none";
+    }
+
+    // Initialize chat as minimized
+    window.onload = function() {
+        document.getElementById("chatPopup").style.display = "none";
+    };
+</script>
 {% endblock %}
