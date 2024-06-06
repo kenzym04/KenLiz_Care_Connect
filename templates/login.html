@@ -1,43 +1,21 @@
-{% extends 'base.html' %}
+<!-- templates/login.html -->
 
-{% block title %}Login - KenLiz CareConnect{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <form action="{{ url_for('login') }}" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <button type="submit">Login</button>
+    </form>
+</body>
 
-{% block content %}
-<h1>Login</h1>
-<form method="POST" action="{{ url_for('login') }}">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required><br>
-    <button type="submit">Login</button>
-</form>
-
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-<script src="https://apis.google.com/js/platform.js" async defer></script>
-<meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com">
-<script>
-    function onSignIn(googleUser) {
-        var profile = googleUser.getBasicProfile();
-        console.log('ID: ' + profile.getId());
-        console.log('Name: ' + profile.getName());
-        console.log('Image URL: ' + profile.getImageUrl());
-        console.log('Email: ' + profile.getEmail());
-
-        var id_token = googleUser.getAuthResponse().id_token;
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/google-login');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function() {
-            console.log('Signed in as: ' + xhr.responseText);
-            if (xhr.responseText === 'success') {
-                window.location.href = '/';
-            } else {
-                alert('Google sign-in failed.');
-            }
-        };
-        xhr.send(JSON.stringify({token: id_token}));
-    }
-</script>
-{% endblock %}
+</html>
