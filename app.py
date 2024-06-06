@@ -5,15 +5,18 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import UTC, datetime
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///kenliz_careconnect.db'
-app.config['SECRET_KEY'] = 'kenzym04'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'kenlizccareconnect@gmail.com'
-app.config['MAIL_PASSWORD'] = 'kenlizccareconnect24$#'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI', 'sqlite:///default.db')
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default_secret_key')
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER', 'localhost')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 25))
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') == 'True'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'default_username')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'default_password')
 
 db = SQLAlchemy(app)
 mail = Mail(app)
@@ -178,7 +181,7 @@ def create_invoice(id):
         total_amount = request.form['amount']
         invoice = f"Invoice Details:\nService: {service_details}\nTotal Amount: {total_amount}"
         
-        msg = Message('Invoice from KenLiz CareConnect', sender='your_email@example.com', recipients=[client_email])
+        msg = Message('Invoice from KenLiz CareConnect', sender=os.getenv('MAIL_USERNAME'), recipients=[client_email])
         msg.body = invoice
         mail.send(msg)
 

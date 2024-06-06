@@ -4,270 +4,273 @@
 
 {% block content %}
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-<style>
-    body {
-        background-color: #f4f4f4;
-    }
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background-color: #f4f4f4;
+        }
 
-    header {
-        background-color: #ffc0cb; /* Pink header */
-        padding: 20px;
-        text-align: center;
-    }
+        header {
+            background-color: #ffc0cb; /* Pink header */
+            padding: 20px;
+            text-align: center;
+        }
 
-    section {
-        padding: 20px;
-        margin: 20px 0;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        section {
+            padding: 20px;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-    h1 {
-        color: #006400; /* Dark green for headings */
-    }
+        h1 {
+            color: #006400; /* Dark green for headings */
+        }
 
-    h2 {
-        color: #000000; /* Black for subheadings */
-    }
+        h2, h3, h4 {
+            color: #000000; /* Black for subheadings */
+        }
 
-    h3 {
-        color: #000000; /* Black for subheadings */
-    }
+        .intro-text, .career-text {
+            margin-bottom: 20px;
+        }
 
-    .intro-text, .career-text {
-        margin-bottom: 20px;
-    }
+        .registration-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
 
-    .registration-container {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 40px;
-    }
+        .registration-card {
+            width: 100%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #fafafa;
+            transition: transform 0.3s;
+        }
 
-    .registration-card {
-        width: 100%;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        background: #fafafa;
-        transition: transform 0.3s;
-    }
+        .registration-card:hover {
+            transform: translateY(-5px);
+        }
 
-    .registration-card:hover {
-        transform: translateY(-5px);
-    }
+        .registration-card h3 {
+            color: #006400; /* Dark green for card headings */
+        }
 
-    .registration-card h3 {
-        color: #006400; /* Dark green for card headings */
-    }
+        .btn {
+            margin-top: 10px;
+            background-color: #006400; /* Dark green button */
+            color: white;
+        }
 
-    .btn {
-        margin-top: 10px;
-        background-color: #006400; /* Dark green button */
-        color: white;
-    }
+        .btn:hover {
+            background-color: #004d00; /* Darker green on hover */
+        }
 
-    .btn:hover {
-        background-color: #004d00; /* Darker green on hover */
-    }
+        .reviews {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            height: 50px; /* Adjust the height as needed */
+            padding: 10px 0; /* Reduced padding */
+        }
 
-    .reviews {
-        overflow: hidden;
-        position: relative;
-        width: 100%;
-        height: 100px; /* Adjust the height as needed */
-    }
+        .reviews ul {
+            display: flex;
+            animation: slide 30s linear infinite; /* Slower animation for readability */
+            margin: 0; /* Removed margin */
+            padding: 0; /* Removed padding */
+        }
 
-    .reviews ul {
-        display: flex;
-        width: calc(1 * 100%); /* Assuming there are 10 reviews */
-        animation: slide 50s linear infinite;
-    }
+        .reviews li {
+            list-style: none;
+            width: 100%; /* Width of one review */
+            padding: 100x; /* Reduced padding */
+            border-left: 3px solid #ffffff;
+            background: #ffffff;
+            margin-right: 5px; /* Reduced margin */
+            flex: 0 0 auto;
+        }
 
-    .reviews li {
-        list-style: none;
-        width: 100%;
-        padding: 10px;
-        border-left: 3px solid #006400;
-        background: #ffc0cb;
-        margin-right: 10px;
-        flex: 0 0 auto;
-    }
+        @keyframes slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
 
-    @keyframes slide {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-100%); }
-    }
+        footer {
+            background: #084ecf; /* Background color for the footer */
+            color: white;
+            padding: 10px; /* Adjusted padding to reduce height */
+            text-align: center;
+        }
 
-    footer {
-        background: #084ecf; /* Black footer */
-        color: white;
-        padding: 20px;
-        text-align: center;
-    }
+        footer .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    footer .footer-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-    }
+        footer .social-icons a {
+            margin: 0 5px; /* Adjusted margin to reduce height */
+            color: white;
+        }
 
-    footer .social-icons a {
-        margin: 0 10px;
-        color: white;
-    }
+        footer .footer-links {
+            margin: 10px 0;
+        }
 
-    footer .social-icons a:hover {
-        color: #f24c68; /* Pink on hover */
-    }
+        footer .footer-links a {
+            color: white;
+            margin: 0 10px;
+        }
 
-    footer .footer-links {
-        margin: 20px 0;
-    }
+        footer .footer-links a:hover {
+            text-decoration: underline;
+        }
 
-    footer .footer-links a {
-        color: white;
-        margin: 0 10px;
-    }
+        footer .footer-logo img {
+            width: 50px;
+            margin-bottom: 10px;
+        }
 
-    footer .footer-links a:hover {
-        text-decoration: underline;
-    }
+        .chat-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            display: none;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background: #fafafa;
+        }
 
-    footer .footer-logo img {
-        width: 50px;
-        margin-bottom: 10px;
-    }
+        .chat-header {
+            padding: 10px;
+            background: #006400; /* Dark green chat header */
+            color: white;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            cursor: pointer;
+        }
 
-    .chat-popup {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        width: 300px;
-        display: none;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        background: #fafafa;
-    }
+        .chat-body {
+            padding: 10px;
+        }
 
-    .chat-header {
-        padding: 10px;
-        background: #006400; /* Dark green chat header */
-        color: white;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-        cursor: pointer;
-    }
+        .chat-close {
+            float: right;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container text-center">
+            <h1>Welcome to KenLiz CareConnect</h1>
+        </div>
+    </header>
 
-    .chat-body {
-        padding: 10px;
-    }
-
-    .chat-close {
-        float: right;
-        cursor: pointer;
-    }
-</style>
-
-<header>
-    <div class="container text-center">
-        <h1>Welcome to KenLiz CareConnect</h1>
-    </div>
-</header>
-
-<section>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="intro-text">
-                    <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="intro-text">
+                        <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
+                    </div>
+                    <div class="registration-card">
+                        <h3>Register as a Health Facility or Private</h3>
+                        <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
+                        <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
+                    </div>
                 </div>
-                <div class="registration-card">
-                    <h3>Register as a Facility or Private Home Care Provider</h3>
-                    <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
-                    <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="career-text">
-                    <p>We offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Enhance your career while making a difference in the lives of those you serve.</p>
-                </div>
-                <div class="registration-card">
-                    <h3>Register as a Health Worker</h3>
-                    <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
-                    <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
+                <div class="col-md-6">
+                    <div class="career-text">
+                        <p>We offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Enhance your career while making a difference in the lives of those you serve.</p>
+                    </div>
+                    <div class="registration-card">
+                        <h3>Register as a Health Worker</h3>
+                        <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
+                        <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<section class="reviews">
-    <div class="container">
-        <h3>Reviews</h3>
-        <ul>
-            <li>"Excellent service! Highly recommended." - Rafiki Health Facility</li>
-                <li>    "Professional and reliable. They exceeded my expectations." - Tumaini Health Facility</li>
-                    <li>   "Highly recommend! The staff was very attentive." - Patient Amina W.</li>
-                        <li>    "Great experience! Will definitely return." - Karibu Health Facility</li>
-                            <li>   "Very satisfied! The care was exceptional." - Patient Otieno M.</li>
-                                <li>   "Top-notch professionals. I felt well taken care of." - Uhuru Health Facility</li>
-                                    <li>  "Will use again. Fantastic service." - Patient Nyambura K.</li>
-                                        <li> "Highly professional and courteous staff." - Amani Health Facility</li>
-                                            <li>  "Excellent care. They made me feel comfortable." - Patient Kibet T.</li>
-                                                <li>  "Reliable services. Always a pleasure visiting." - Jenga Health Facility</li>
-        </ul>
-    </div>
-</section>
+    <section class="reviews">
+        <div class="container">
+            <!-- <h8>Reviews</h8> -->
+            <ul>
+                <li>"Excellent service! Highly recommended." - Rafiki Health Facility</li>
+                <li>"Professional and reliable. They exceeded my expectations." - Tumaini Health Facility</li>
+                <li>"Highly recommend! The staff was very attentive." - Patient Amina W.</li>
+                <li>"Great experience! Will definitely return." - Karibu Health Facility</li>
+                <li>"Very satisfied! The care was exceptional." - Patient Otieno M.</li>
+                <li>"Top-notch professionals. I felt well taken care of." - Uhuru Health Facility</li>
+                <li>"Will use again. Fantastic service." - Patient Nyambura K.</li>
+                <li>"Highly professional and courteous staff." - Amani Health Facility</li>
+                <li>"Excellent care. They made me feel comfortable." - Patient Kibet T.</li>
+                <li>"Reliable services. Always a pleasure visiting." - Jenga Health Facility</li>
+            </ul>
+        </div>
+    </section>
 
-<footer>
-    <div class="container footer-content">
-        <div class="footer-logo">
-            <img src="path/to/logo.png" alt="KenLiz CareConnect Logo">
+    <footer>
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <img src="path/to/logo.png" alt="KenLiz CareConnect Logo">
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Sitemap</a> | 
+                <a href="#">Contact Us</a>
+            </div>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+            </div>
         </div>
-        <div class="footer-links">
-            <a href="#">Privacy Policy</a> | 
-            <a href="#">Sitemap</a> | 
-            <a href="#">Contact Us</a>
+        <div class="container text-center">
+            <p>&copy; 2024 KenLiz CareConnect, Inc.</p>
         </div>
-        <div class="social-icons">
-            <a href="#"><i class="fab fa-facebook"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
-            <a href="#"><i class="fab fa-youtube"></i></a>
-            <a href="#"><i class="fab fa-twitter"></i></a>
-            <a href="#"><i class="fab fa-linkedin"></i></a>
-            <a href="#"><i class="fab fa-tiktok"></i></a>
-        </div>
-    </div>
-    <div class="container text-center">
-        <p>&copy; 2024 KenLiz CareConnect, Inc.</p>
-    </div>
-</footer>
+    </footer>
 
-<div class="chat-popup" id="chatPopup">
-    <div class="chat-header" onclick="toggleChat()">
-        Real-Time Chat <span class="chat-close" onclick="closeChat(event)">x</span>
+    <div class="chat-popup" id="chatPopup">
+        <div class="chat-header" onclick="toggleChat()">
+            Real-Time Chat <span class="chat-close" onclick="closeChat(event)">x</span>
+        </div>
+        <div class="chat-body">
+            <!-- Your real-time chat integration code goes here -->
+            <p>Welcome to our chat service!</p>
+        </div>
     </div>
-    <div class="chat-body">
-        <!-- Your real-time chat widget code here -->
-        <script type="text/javascript">
-            var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
-            (function() {
-                var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
-                s1.async = true;
-                s1.src = 'https://embed.tawk.to/YOUR_PROPERTY_ID/DEFAULT';
-                s1.charset = 'UTF-8';
-                s1.setAttribute('crossorigin', '*');
-                s0.parentNode.insertBefore(s1, s0);
-            })();
-        </script>
-    </div>
-</div>
+
+    <button class="open-button" onclick="toggleChat()">Chat</button>
+
+    <script>
+        function toggleChat() {
+            var chatPopup = document.getElementById("chatPopup");
+            if (chatPopup.style.display === "block") {
+                chatPopup.style.display = "none";
+            } else {
+                chatPopup.style.display = "block";
+            }
+        }
+
+        function closeChat(event) {
+            event.stopPropagation();
+            document.getElementById("chatPopup").style.display = "none";
+        }
+    </script>
 
 
 
