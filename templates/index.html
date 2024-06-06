@@ -11,7 +11,7 @@
     }
 
     header {
-        background-color: #ff69b4; /* Pink header */
+        background-color: #ffc0cb; /* Pink header */
         padding: 20px;
         text-align: center;
     }
@@ -25,11 +25,15 @@
     }
 
     h1 {
-        color: #f4f6f9fb;
+        color: #006400; /* Dark green for headings */
     }
 
     h2 {
-        color: #0056b3;
+        color: #000000; /* Black for subheadings */
+    }
+
+    h3 {
+        color: #000000; /* Black for subheadings */
     }
 
     .intro-text, .career-text {
@@ -43,7 +47,7 @@
     }
 
     .registration-card {
-        width: 48%;
+        width: 100%;
         padding: 20px;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -57,11 +61,17 @@
     }
 
     .registration-card h3 {
-        color: #0056b3;
+        color: #006400; /* Dark green for card headings */
     }
 
     .btn {
         margin-top: 10px;
+        background-color: #006400; /* Dark green button */
+        color: white;
+    }
+
+    .btn:hover {
+        background-color: #004d00; /* Darker green on hover */
     }
 
     .reviews {
@@ -73,16 +83,16 @@
 
     .reviews ul {
         display: flex;
-        width: calc(10 * 100%); /* Assuming there are 10 reviews */
-        animation: slide 10s linear infinite;
+        width: calc(1 * 100%); /* Assuming there are 10 reviews */
+        animation: slide 50s linear infinite;
     }
 
     .reviews li {
         list-style: none;
         width: 100%;
         padding: 10px;
-        border-left: 3px solid #0056b3;
-        background: #eef;
+        border-left: 3px solid #006400;
+        background: #ffc0cb;
         margin-right: 10px;
         flex: 0 0 auto;
     }
@@ -93,7 +103,7 @@
     }
 
     footer {
-        background: #0056b3;
+        background: #084ecf; /* Black footer */
         color: white;
         padding: 20px;
         text-align: center;
@@ -112,7 +122,7 @@
     }
 
     footer .social-icons a:hover {
-        color: #ddd;
+        color: #f24c68; /* Pink on hover */
     }
 
     footer .footer-links {
@@ -129,7 +139,7 @@
     }
 
     footer .footer-logo img {
-        width: 100px;
+        width: 50px;
         margin-bottom: 10px;
     }
 
@@ -147,7 +157,7 @@
 
     .chat-header {
         padding: 10px;
-        background: #0056b3;
+        background: #006400; /* Dark green chat header */
         color: white;
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
@@ -175,21 +185,21 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="intro-text">
-                    <p>Transform your home or health facility with our comprehensive care services, designed to meet the unique needs of every patient. We provide top-quality certified healthcare professionals to deliver exceptional care where it's needed most. From homes to health facilities, our services ensure that patients receive the highest standard of care and support.</p>
+                    <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
                 </div>
                 <div class="registration-card">
-                    <h3>Register a Facility</h3>
-                    <p>Partner with us to receive top-notch healthcare services.</p>
+                    <h3>Register as a Facility or Private Home Care Provider</h3>
+                    <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
                     <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="career-text">
-                    <p>We also offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Partner with us to enhance your career while making a difference in the lives of those you serve.</p>
+                    <p>We offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Enhance your career while making a difference in the lives of those you serve.</p>
                 </div>
                 <div class="registration-card">
-                    <h3>Register as Health Worker</h3>
-                    <p>Join our team of dedicated healthcare professionals.</p>
+                    <h3>Register as a Health Worker</h3>
+                    <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
                     <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
                 </div>
             </div>
@@ -199,18 +209,18 @@
 
 <section class="reviews">
     <div class="container">
-        <h2>Reviews</h2>
+        <h3>Reviews</h3>
         <ul>
-            <li>Review 1: "Excellent service!" - Health Facility A</li>
-            <li>Review 2: "Professional and reliable." - Health Facility B</li>
-            <li>Review 3: "Highly recommend!" - Patient C</li>
-            <li>Review 4: "Great experience!" - Health Facility D</li>
-            <li>Review 5: "Very satisfied!" - Patient E</li>
-            <li>Review 6: "Top-notch professionals." - Health Facility F</li>
-            <li>Review 7: "Will use again." - Patient G</li>
-            <li>Review 8: "Highly professional." - Health Facility H</li>
-            <li>Review 9: "Excellent care." - Patient I</li>
-            <li>Review 10: "Reliable services." - Health Facility J</li>
+            <li>"Excellent service! Highly recommended." - Rafiki Health Facility</li>
+                <li>    "Professional and reliable. They exceeded my expectations." - Tumaini Health Facility</li>
+                    <li>   "Highly recommend! The staff was very attentive." - Patient Amina W.</li>
+                        <li>    "Great experience! Will definitely return." - Karibu Health Facility</li>
+                            <li>   "Very satisfied! The care was exceptional." - Patient Otieno M.</li>
+                                <li>   "Top-notch professionals. I felt well taken care of." - Uhuru Health Facility</li>
+                                    <li>  "Will use again. Fantastic service." - Patient Nyambura K.</li>
+                                        <li> "Highly professional and courteous staff." - Amani Health Facility</li>
+                                            <li>  "Excellent care. They made me feel comfortable." - Patient Kibet T.</li>
+                                                <li>  "Reliable services. Always a pleasure visiting." - Jenga Health Facility</li>
         </ul>
     </div>
 </section>
@@ -259,25 +269,6 @@
     </div>
 </div>
 
-<script>
-    function toggleChat() {
-        var chatPopup = document.getElementById("chatPopup");
-        if (chatPopup.style.display === "none" || chatPopup.style.display === "") {
-            chatPopup.style.display = "block";
-        } else {
-            chatPopup.style.display = "none";
-        }
-    }
 
-    function closeChat(event) {
-        event.stopPropagation();
-        var chatPopup = document.getElementById("chatPopup");
-        chatPopup.style.display = "none";
-    }
 
-    // Initialize chat as minimized
-    window.onload = function() {
-        document.getElementById("chatPopup").style.display = "none";
-    };
-</script>
 {% endblock %}
