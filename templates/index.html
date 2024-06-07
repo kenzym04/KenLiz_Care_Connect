@@ -4,175 +4,180 @@
 
 {% block content %}
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-    <style>
-        body {
-            background-color: #f4f4f4;
-        }
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<style>
+    body {
+        background-color: #f4f4f4;
+    }
 
-        header {
-            background-color: #ffc0cb; /* Pink header */
-            padding: 20px;
-            text-align: center;
-        }
+    header {
+        background-color: #ffffff; /* Green header */
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        /* 
+        justify-content: space-between;
+         */
+    }
 
-        section {
-            padding: 20px;
-            margin: 20px 0;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    header img {
+        max-width: 150px; /* Adjust the size of the logo as needed */
+        margin-right: 300px;
+    }
 
-        h1 {
-            color: #006400; /* Dark green for headings */
-        }
+    section {
+        padding: 20px;
+        margin: 20px 0;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        h2, h3, h4 {
-            color: #000000; /* Black for subheadings */
-        }
+    h1 {
+        color: #d74294; /* Dark green for headings */
+    }
 
-        .intro-text, .career-text {
-            margin-bottom: 20px;
-        }
+    h2, h3, h4 {
+        color: #000000; /* Black for subheadings */
+    }
 
-        .registration-container {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-        }
+    .intro-text, .career-text {
+        margin-bottom: 20px;
+    }
 
-        .registration-card {
-            width: 100%;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: #fafafa;
-            transition: transform 0.3s;
-        }
+    .registration-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+    }
 
-        .registration-card:hover {
-            transform: translateY(-5px);
-        }
+    .registration-card {
+        width: 100%;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: #fafafa;
+        transition: transform 0.3s;
+    }
 
-        .registration-card h3 {
-            color: #006400; /* Dark green for card headings */
-        }
+    .registration-card:hover {
+        transform: translateY(-5px);
+    }
 
-        .btn {
-            margin-top: 10px;
-            background-color: #006400; /* Dark green button */
-            color: white;
-        }
+    .registration-card h3 {
+        color: #006400; /* Dark green for card headings */
+    }
 
-        .btn:hover {
-            background-color: #004d00; /* Darker green on hover */
-        }
+    .btn {
+        margin-top: 10px;
+        background-color: #006400; /* Dark green button */
+        color: white;
+    }
 
-        .reviews {
-            overflow: hidden;
-            position: relative;
-            width: 100%;
-            height: 50px; /* Adjust the height as needed */
-            padding: 10px 0; /* Reduced padding */
-        }
+    .btn:hover {
+        background-color: #004d00; /* Darker green on hover */
+    }
 
-        .reviews ul {
-            display: flex;
-            animation: slide 30s linear infinite; /* Slower animation for readability */
-            margin: 0; /* Removed margin */
-            padding: 0; /* Removed padding */
-        }
+    .reviews {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+        height: 50px; /* Adjust the height as needed */
+        padding: 10px 0; /* Reduced padding */
+    }
 
-        .reviews li {
-            list-style: none;
-            width: 100%; /* Width of one review */
-            padding: 100x; /* Reduced padding */
-            border-left: 3px solid #ffffff;
-            background: #ffffff;
-            margin-right: 5px; /* Reduced margin */
-            flex: 0 0 auto;
-        }
+    .reviews ul {
+        display: flex;
+        animation: slide 30s linear infinite; /* Slower animation for readability */
+        margin: 0; /* Removed margin */
+        padding: 0; /* Removed padding */
+    }
 
-        @keyframes slide {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
+    .reviews li {
+        list-style: none;
+        width: 100%; /* Width of one review */
+        padding: 100x; /* Reduced padding */
+        border-left: 3px solid #ffffff;
+        background: #ffffff;
+        margin-right: 5px; /* Reduced margin */
+        flex: 0 0 auto;
+    }
 
-        footer {
-            background: #084ecf; /* Background color for the footer */
-            color: white;
-            padding: 10px; /* Adjusted padding to reduce height */
-            text-align: center;
-        }
+    @keyframes slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-100%); }
+    }
 
-        footer .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+    footer {
+        background: #084ecf; /* Background color for the footer */
+        color: white;
+        padding: 10px; /* Adjusted padding to reduce height */
+        text-align: center;
+    }
 
-        footer .social-icons a {
-            margin: 0 5px; /* Adjusted margin to reduce height */
-            color: white;
-        }
+    footer .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 
-        footer .footer-links {
-            margin: 10px 0;
-        }
+    footer .social-icons a {
+        margin: 0 5px; /* Adjusted margin to reduce height */
+        color: white;
+    }
 
-        footer .footer-links a {
-            color: white;
-            margin: 0 10px;
-        }
+    footer .footer-links {
+        margin: 10px 0;
+    }
 
-        footer .footer-links a:hover {
-            text-decoration: underline;
-        }
+    footer .footer-links a {
+        color: white;
+        margin: 0 10px;
+    }
 
-        footer .footer-logo img {
-            width: 50px;
-            margin-bottom: 10px;
-        }
+    footer .footer-links a:hover {
+        text-decoration: underline;
+    }
 
-        .chat-popup {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            display: none;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: #fafafa;
-        }
+    .chat-popup {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 300px;
+        display: none;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background: #fafafa;
+    }
 
-        .chat-header {
-            padding: 10px;
-            background: #006400; /* Dark green chat header */
-            color: white;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            cursor: pointer;
-        }
+    .chat-header {
+        padding: 10px;
+        background: #006400; /* Dark green chat header */
+        color: white;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        cursor: pointer;
+    }
 
-        .chat-body {
-            padding: 10px;
-        }
+    .chat-body {
+        padding: 10px;
+    }
 
-        .chat-close {
-            float: right;
-            cursor: pointer;
-        }
-    </style>
+    .chat-close {
+        float: right;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body>
     <header>
-        <div class="container text-center">
-            <h1>Welcome to KenLiz CareConnect</h1>
-        </div>
+        <!-- <p style="display:inline-block;"> -->
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="KenLiz CareConnect Logo">
+        <h1>Welcome to KenLiz CareConnect</h1>
     </header>
 
     <section>
@@ -180,6 +185,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="intro-text">
+                        <img src="{{ url_for('static', filename='images/health_professionals-transformed.jpeg') }}" alt="Intro Image" class="img-fluid mb-3">
                         <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
                     </div>
                     <div class="registration-card">
@@ -197,6 +203,7 @@
                         <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
                         <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
                     </div>
+                    <img src="{{ url_for('static', filename='images/healthcare-transformed.jpeg') }}" alt="Career Image" class="img-fluid mb-3">
                 </div>
             </div>
         </div>
@@ -222,9 +229,6 @@
 
     <footer>
         <div class="container footer-content">
-            <div class="footer-logo">
-                <img src="path/to/logo.png" alt="KenLiz CareConnect Logo">
-            </div>
             <div class="footer-links">
                 <a href="#">Privacy Policy</a> | 
                 <a href="#">Sitemap</a> | 
@@ -271,7 +275,4 @@
             document.getElementById("chatPopup").style.display = "none";
         }
     </script>
-
-
-
 {% endblock %}
