@@ -3,38 +3,67 @@
 {% block title %}Register Health Worker{% endblock %}
 
 {% block content %}
-<div class="container" style="margin-bottom: 50px;">
-    <h2>Register as Health Worker</h2>
+<style>
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h2 {
+        color: #343a40;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+    }
+</style>
+<div class="container mt-5 mb-5 form-container">
+    <h2 class="text-center mb-4">Register as Health Worker</h2>
     <form method="POST" action="{{ url_for('register_healthworker') }}" enctype="multipart/form-data">
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="name">Name:</label>
             <input type="text" class="form-control" id="name" name="name" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="email">Email:</label>
             <input type="email" class="form-control" id="email" name="email" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="phone">Phone:</label>
             <input type="text" class="form-control" id="phone" name="phone" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="address">Address:</label>
             <input type="text" class="form-control" id="address" name="address" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="qualifications">Qualifications:</label>
             <textarea class="form-control" id="qualifications" name="qualifications" required></textarea>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="experience">Experience:</label>
             <textarea class="form-control" id="experience" name="experience" required></textarea>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="specializations">Specializations:</label>
             <textarea class="form-control" id="specializations" name="specializations"></textarea>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="worker_type">Worker Type:</label>
             <select class="form-control" id="worker_type" name="worker_type" required>
                 <option value="Nursing Assistant/Care giver">Nursing Assistant/Care giver</option>
@@ -43,35 +72,35 @@
                 <option value="Midwife">Midwife</option>
                 <option value="Clinical officer">Clinical officer</option>
                 <option value="Bio med">Bio med</option>
-                <option value="Pharmacist">Pharmacist</option>
+                <option value="Pharmacist">Pharmacist</</option>
                 <option value="Physician">Physician</option>
                 <option value="Dentist">Dentist</option>
                 <option value="Specialist/Surgeon">Specialist/Surgeon</option>
                 <option value="Other">Other</option>
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="id_number">ID Number:</label>
             <input type="text" class="form-control" id="id_number" name="id_number" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="cv">CV:</label>
             <input type="file" class="form-control" id="cv" name="cv" accept=".pdf,.doc,.docx" required>
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="certifications">Certifications:</label>
             <input type="file" class="form-control" id="certifications" name="certifications" accept=".pdf,.doc,.docx">
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="photo">Photo:</label>
             <input type="file" class="form-control" id="photo" name="photo" accept=".jpg,.jpeg,.png">
         </div>
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="location">Location:</label>
             <input type="text" class="form-control" id="location" name="location" required>
         </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Register</button>
+        <div class="form-group mb-3">
+            <button type="submit" class="btn btn-primary btn-lg">Register</button>
         </div>
     </form>
 </div>
