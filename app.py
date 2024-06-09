@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
 import os
 from dotenv import load_dotenv
@@ -90,6 +91,12 @@ def register_healthworker():
 @app.route('/register-facility', methods=['GET', 'POST'])
 def register_facility():
     if request.method == 'POST':
+        # Check if the email already exists
+        existing_facility = Facility.query.filter_by(email=request.form['email']).first()
+        if existing_facility:
+            flash('Email already registered. Please use a different email address.', 'danger')
+            return redirect(url_for('register_facility'))
+
         new_facility = Facility(
             name=request.form['name'],
             email=request.form['email'],
@@ -97,11 +104,18 @@ def register_facility():
             address=request.form['address'],
             location=request.form['location']
         )
-        db.session.add(new_facility)
-        db.session.commit()
-        flash('Registration successful! Please wait for admin approval.')
-        return redirect(url_for('index'))
+
+        try:
+            db.session.add(new_facility)
+            db.session.commit()
+            flash('Registration successful! You are being redirected to your dashboard.', 'success')
+            return redirect(url_for('facility_dashboard', id=new_facility.id))
+        except IntegrityError:
+            db.session.rollback()
+            flash('Email already registered. Please use a different email address.', 'danger')
+            return redirect(url_for('register_facility'))
     return render_template('register_facility.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -229,6 +243,27 @@ def healthworker_dashboard(id):
 def facility_dashboard(id):
     facility = Facility.query.get_or_404(id)
     return render_template('facility_dashboard.html', facility=facility)
+
+@app.route('/update_facility_profile/<int:id>', methods=['POST'])
+@login_required
+def update_facility_profile(id):
+    facility = Facility.query.get_or_404(id)
+    if request.method == 'POST':
+        facility.name = request.form['name']
+        facility.email = request.form['email']
+        facility.phone = request.form['phone']
+        facility.address = request.form['address']
+        facility.location = request.form['location']
+        
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except IntegrityError:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'danger')
+        
+        return redirect(url_for('facility_dashboard', id=facility.id))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
