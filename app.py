@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
+
 import os
 from dotenv import load_dotenv
 
@@ -23,6 +25,7 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+migrate = Migrate(app, db)
 
 class HealthWorker(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
