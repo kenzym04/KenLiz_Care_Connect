@@ -64,6 +64,12 @@ def index():
 @app.route('/register-healthworker', methods=['GET', 'POST'])
 def register_healthworker():
     if request.method == 'POST':
+        email = request.form['email']
+        existing_healthworker = HealthWorker.query.filter_by(email=email).first()
+        if existing_healthworker:
+            flash('Email already registered. Please use a different email address.', 'danger')
+            return redirect(url_for('register_healthworker'))
+        
         new_healthworker = HealthWorker(
             name=request.form['name'],
             email=request.form['email'],
@@ -82,10 +88,16 @@ def register_healthworker():
             location=request.form['location'],
             password=generate_password_hash(request.form['password'])
         )
-        db.session.add(new_healthworker)
-        db.session.commit()
-        flash('Registration successful! Please wait for admin approval.')
-        return redirect(url_for('index'))
+        try:
+            db.session.add(new_healthworker)
+            db.session.commit()
+            flash('Registration successful! Please wait for admin approval.')
+            # Redirect to the health worker's dashboard
+            return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))
+        except IntegrityError:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'danger')
+            return redirect(url_for('register_healthworker'))
     return render_template('register_healthworker.html')
 
 @app.route('/register-facility', methods=['GET', 'POST'])
