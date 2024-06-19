@@ -1,8 +1,35 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Dashboard - KenLiz CareConnect{% endblock %}
+{% block title %}Dashboard - Health Worker{% endblock %}
 
 {% block content %}
-<h1>Welcome to your Dashboard, {{ session['email'] }}</h1>
-<p>Here you can manage your profile, view job offers, and more.</p>
+<h1>Welcome to your Dashboard, {{ healthworker.name }}</h1>
+<p>Profile Details:</p>
+<ul>
+    <li><strong>Email:</strong> {{ healthworker.email }}</li>
+    <li><strong>Phone:</strong> {{ healthworker.phone }}</li>
+    <li><strong>Address:</strong> {{ healthworker.address }}</li>
+    <li><strong>Qualifications:</strong> {{ healthworker.qualifications }}</li>
+    <li><strong>Experience:</strong> {{ healthworker.experience }}</li>
+    <li><strong>Specializations:</strong> {{ healthworker.specializations }}</li>
+    <li><strong>Availability:</strong> {{ healthworker.availability }}</li>
+    <li><strong>Status:</strong> {{ healthworker.status }}</li>
+</ul>
+
+<h2>Update Availability</h2>
+<form method="POST" action="{{ url_for('healthworker_update', id=healthworker.id) }}">
+    <label>Availability:</label>
+    <select name="availability">
+        <option value="Available">Available</option>
+        <option value="Full-time">Available Full-time</option>
+        <option value="Part-time">Available Part-time</option>
+        <option value="Employed">Employed</option>
+        <option value="Unavailable">Unavailable</option>
+    </select><br>
+    <button type="submit">Update</button>
+</form>
+
+<h2>View Job Offers</h2>
+<!-- Add code here to display job offers -->
+
 {% endblock %}
