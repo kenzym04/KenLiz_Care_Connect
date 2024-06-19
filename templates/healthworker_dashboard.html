@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Dashboard - Health Worker{% endblock %}
+{% block title %}Dashboard - {{ healthworker.name }}{% endblock %}
 
 {% block content %}
 <style>
@@ -46,7 +46,7 @@
 </style>
 
 <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4">Health Worker Dashboard</h2>
+    <h2 class="text-center mb-4">{{ healthworker.name }}, Welcome to your dashboard</h2>
 
     <div class="profile-section">
         <h3>Profile Details</h3>
@@ -123,13 +123,27 @@
             </div>
             <div class="form-group">
                 <label for="status">Status:</label>
-                <input type="text" class="form-control" id="status" name="status" value="{{ healthworker.status }}" required>
+                <input type="text" class="form-control" id="status" name="status" value="{{ healthworker.status }}" readonly>
             </div>
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
             </div>
         </form>
     </div>
+
+    {% if healthworker.is_assigned %}
+    <div class="task-section mt-5">
+        <h3>Assigned Task</h3>
+        <div class="form-group">
+            <label for="assigned_facility">Assigned Facility:</label>
+            <input type="text" class="form-control" id="assigned_facility" value="{{ healthworker.facility.name }} - {{ healthworker.facility.location }}" readonly>
+        </div>
+        <div class="form-group">
+            <label for="task_status">Task Status:</label>
+            <input type="text" class="form-control" id="task_status" value="{{ healthworker.assigned_task }}" readonly>
+        </div>
+    </div>
+    {% endif %}
 </div>
 
 {% endblock %}

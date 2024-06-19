@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Facility Dashboard{% endblock %}
+{% block title %}Dashboard - {{ facility.name }}{% endblock %}
 
 {% block content %}
 <style>
@@ -42,7 +42,7 @@
 </style>
 
 <div class="container mt-5 mb-5">
-    <h2 class="text-center mb-4">Facility Dashboard</h2>
+    <h2 class="text-center mb-4">{{ facility.name }}, Welcome to your dashboard</h2>
 
     <div class="profile-section">
         <h3>Facility Profile</h3>

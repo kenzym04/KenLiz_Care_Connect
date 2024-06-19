@@ -88,7 +88,7 @@
                     <td>{{ hw.worker_type }}</td>
                     <td>{{ hw.status }}</td>
                     <td>
-                        <a href="{{ url_for('assign_task', id=hw.id) }}" class="btn btn-info btn-sm">Assign Task</a>
+                        <a href="{{ url_for('assign_task', healthworker_id=hw.id) }}" class="btn btn-info btn-sm">Assign Task</a>
                         <form method="POST" action="{{ url_for('delete_healthworker', id=hw.id) }}" style="display:inline;">
                             <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                         </form>

@@ -1,7 +1,6 @@
-from flask import Flask, app
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime, UTC
-
+from datetime import datetime
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 
@@ -22,9 +21,10 @@ class HealthWorker(db.Model):
     certifications = db.Column(db.String(200), nullable=True)
     photo = db.Column(db.String(100), nullable=True)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
-    assigned_task = db.Column(db.String(20), nullable=False, default='Pending')
+    password_hash = db.Column(db.String(128), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
     assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'), nullable=True)
+    assigned_facility = db.relationship('Facility', foreign_keys=[assigned_facility_id], backref=db.backref('assigned_workers', lazy=True))
 
 class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,10 +33,14 @@ class Facility(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
     health_workers = db.relationship('HealthWorker', backref='facility', lazy=True)
 
+# Initialize Flask-Migrate
+migrate = Migrate()
 
-   
-
- 
+# This function will initialize Flask app with SQLAlchemy and Flask-Migrate
+def init_app(app):
+    db.init_app(app)
+    migrate.init_app(app, db)

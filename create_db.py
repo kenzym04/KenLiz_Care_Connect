@@ -25,9 +25,9 @@ with app.app_context():
             cv='',
             certifications='',
             photo='',
-            location=''
+            location='',
+            password_hash=generate_password_hash('kenlizcareconnect24$#')
         )
-        admin_user.password = generate_password_hash('kenlizcareconnect24$#')
         db.session.add(admin_user)
         db.session.commit()
 

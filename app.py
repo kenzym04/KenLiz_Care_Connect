@@ -1,8 +1,11 @@
+from asyncio import Task
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import LoginManager, UserMixin, login_required
 from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
 import os
@@ -23,6 +26,8 @@ db = SQLAlchemy(app)
 mail = Mail(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'login'
+migrate = Migrate(app, db)
 
 class HealthWorker(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,8 +46,22 @@ class HealthWorker(UserMixin, db.Model):
     certifications = db.Column(db.String(200), nullable=True)
     photo = db.Column(db.String(100), nullable=True)
     location = db.Column(db.String(100), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)  
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
-    password = db.Column(db.String(200), nullable=False)
+    assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
+    assigned_facility = db.relationship('Facility', backref='assigned_workers')
+
+    @property
+    def facility(self):
+        return Facility.query.get(self.assigned_facility_id)
+
+    @property
+    def is_assigned(self):
+        return self.assigned_facility_id is not None
+
+    def update_status(self):
+        self.status = 'Assigned' if self.is_assigned else 'Pending'
+        db.session.commit()
 
 class Facility(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -52,6 +71,7 @@ class Facility(db.Model):
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    health_workers = db.relationship('HealthWorker', backref='facility')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -86,13 +106,12 @@ def register_healthworker():
             certifications=request.form['certifications'],
             photo=request.form['photo'],
             location=request.form['location'],
-            password=generate_password_hash(request.form['password'])
+            password_hash=generate_password_hash(request.form['password'])
         )
         try:
             db.session.add(new_healthworker)
             db.session.commit()
             flash('Registration successful! Please wait for admin approval.')
-            # Redirect to the health worker's dashboard
             return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))
         except IntegrityError:
             db.session.rollback()
@@ -103,7 +122,6 @@ def register_healthworker():
 @app.route('/register-facility', methods=['GET', 'POST'])
 def register_facility():
     if request.method == 'POST':
-        # Check if the email already exists
         existing_facility = Facility.query.filter_by(email=request.form['email']).first()
         if existing_facility:
             flash('Email already registered. Please use a different email address.', 'danger')
@@ -114,65 +132,56 @@ def register_facility():
             email=request.form['email'],
             phone=request.form['phone'],
             address=request.form['address'],
-            location=request.form['location']
+            location=request.form['location'],
         )
-
         try:
             db.session.add(new_facility)
             db.session.commit()
-            flash('Registration successful! You are being redirected to your dashboard.', 'success')
+            flash('Registration successful! You can now login.')
             return redirect(url_for('facility_dashboard', id=new_facility.id))
         except IntegrityError:
             db.session.rollback()
-            flash('Email already registered. Please use a different email address.', 'danger')
+            flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('register_facility'))
     return render_template('register_facility.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        healthworker = HealthWorker.query.filter_by(email=email).first()
-        if healthworker and check_password_hash(healthworker.password, password):
-            login_user(healthworker)
-            if healthworker.worker_type == 'admin':
+        user = HealthWorker.query.filter_by(email=request.form['email']).first()
+        if user and check_password_hash(user.password_hash, request.form['password']):
+            login_user(user)
+            flash('Login successful!', 'success')
+            if user.worker_type == 'admin':
                 return redirect(url_for('admin_dashboard'))
-            elif healthworker.worker_type == 'healthworker':
-                return redirect(url_for('healthworker_dashboard', id=healthworker.id))
-        facility = Facility.query.filter_by(email=email).first()
-        if facility:
-            session['user_id'] = facility.id
-            session['user_type'] = 'facility'
-            flash('Login successful.')
-            return redirect(url_for('facility_dashboard', id=facility.id))
+            else:
+                return redirect(url_for('healthworker_dashboard', id=user.id))
         else:
-            flash('Invalid email or password.')
+            flash('Invalid email or password. Please try again.', 'danger')
+            return redirect(url_for('login'))
     return render_template('login.html')
 
+# Admin Dashboard Route
 @app.route('/admin')
-@login_required
 def admin_dashboard():
-    if current_user.worker_type != 'admin':
-        flash('Unauthorized access.')
-        return redirect(url_for('index'))
     location = request.args.get('location')
     worker_type = request.args.get('worker_type')
     facility_location = request.args.get('facility_location')
+    task_status = request.args.get('task_status')
 
-    healthworkers = HealthWorker.query
-    facilities = Facility.query
+    healthworkers = HealthWorker.query.all()
+    facilities = Facility.query.all()
 
+    # Apply filters
     if location:
-        healthworkers = healthworkers.filter(HealthWorker.location.ilike(f'%{location}%'))
+        healthworkers = [hw for hw in healthworkers if hw.location == location]
     if worker_type:
-        healthworkers = healthworkers.filter_by(worker_type=worker_type)
+        healthworkers = [hw for hw in healthworkers if hw.worker_type == worker_type]
     if facility_location:
-        facilities = facilities.filter(Facility.location.ilike(f'%{facility_location}%'))
-
-    healthworkers = healthworkers.all()
-    facilities = facilities.all()
+        facilities = [f for f in facilities if f.location == facility_location]
+    if task_status:
+        tasks = Task.query.filter_by(status=task_status).all()
+        healthworkers = [hw for hw in healthworkers if any(task.healthworker_id == hw.id for task in tasks)]
 
     return render_template('admin_dashboard.html', healthworkers=healthworkers, facilities=facilities)
 
@@ -187,16 +196,29 @@ def healthworker_update(id):
         return redirect(url_for('admin_dashboard'))
     return render_template('healthworker_update.html', healthworker=healthworker)
 
-@app.route('/assign-task/<int:id>', methods=['GET', 'POST'])
-@login_required
-def assign_task(id):
-    healthworker = HealthWorker.query.get_or_404(id)
+# Assign Task Route
+@app.route('/assign_task/<int:healthworker_id>', methods=['GET', 'POST'])
+def assign_task(healthworker_id):
+    healthworker = HealthWorker.query.get_or_404(healthworker_id)
+    facilities = Facility.query.all()
+
     if request.method == 'POST':
-        healthworker.status = 'deployed'
+        facility_id = request.form.get('facility_id')
+        facility = Facility.query.get_or_404(facility_id)
+
+        # Create and save the task
+        task = Task(healthworker_id=healthworker.id, facility_id=facility.id, status='Pending')
+        db.session.add(task)
         db.session.commit()
-        flash('Health worker assigned to task successfully.')
+
+        # Update health worker status
+        healthworker.status = 'Assigned'
+        db.session.commit()
+
+        flash('Task assigned successfully!', 'success')
         return redirect(url_for('admin_dashboard'))
-    return render_template('assign_task.html', healthworker=healthworker)
+
+    return render_template('assign_task.html', healthworker=healthworker, facilities=facilities)
 
 @app.route('/create-invoice/<int:id>', methods=['GET', 'POST'])
 @login_required
@@ -207,7 +229,7 @@ def create_invoice(id):
         total_amount = request.form['amount']
         invoice = f"Invoice Details:\nService: {service_details}\nTotal Amount: {total_amount}"
         
-        msg = Message('Invoice from KenLiz CareConnect', sender=os.getenv('MAIL_USERNAME'), recipients=[client_email])
+        msg = Message('Invoice from MediConnect International', sender=os.getenv('MAIL_USERNAME'), recipients=[client_email])
         msg.body = invoice
         mail.send(msg)
 
@@ -304,6 +326,48 @@ def healthworker_update_profile(id):
         return redirect(url_for('healthworker_dashboard', id=healthworker.id))
 
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
+
+@app.route('/assign_healthworker/<int:healthworker_id>', methods=['GET', 'POST'])
+@login_required
+def assign_healthworker(healthworker_id):
+    healthworker = HealthWorker.query.get_or_404(healthworker_id)
+    facilities = Facility.query.all()
+    if request.method == 'POST':
+        try:
+            facility_id = request.form['facility']
+            facility = Facility.query.get(facility_id)
+            if facility:
+                healthworker.facility_id = facility.id
+                healthworker.status = 'Assigned'
+            else:
+                healthworker.facility_id = None
+                healthworker.status = 'Pending'
+            db.session.commit()
+            flash('Health worker assigned to facility successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'danger')
+            print(str(e))
+        
+        return redirect(url_for('healthworker_dashboard', id=healthworker.id))
+    
+    return render_template('assign_healthworker.html', healthworker=healthworker, facilities=facilities)
+
+@app.route('/unassign_healthworker/<int:healthworker_id>', methods=['POST'])
+@login_required
+def unassign_healthworker(healthworker_id):
+    healthworker = HealthWorker.query.get_or_404(healthworker_id)
+    try:
+        healthworker.facility_id = None
+        healthworker.status = 'Pending'
+        db.session.commit()
+        flash('Health worker unassigned from facility successfully!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred. Please try again.', 'danger')
+        print(str(e))
+    
+    return redirect(url_for('healthworker_dashboard', id=healthworker.id))
 
 if __name__ == '__main__':
     app.run(debug=True)
