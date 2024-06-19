@@ -275,7 +275,35 @@ def update_facility_profile(id):
             flash('An error occurred. Please try again.', 'danger')
         
         return redirect(url_for('facility_dashboard', id=facility.id))
+    
+@app.route('/healthworker_update_profile/<int:id>', methods=['GET', 'POST'])
+@login_required
+def healthworker_update_profile(id):
+    healthworker = HealthWorker.query.get_or_404(id)
+    if request.method == 'POST':
+        healthworker.name = request.form['name']
+        healthworker.email = request.form['email']
+        healthworker.phone = request.form['phone']
+        healthworker.address = request.form['address']
+        healthworker.qualifications = request.form['qualifications']
+        healthworker.experience = request.form['experience']
+        healthworker.specializations = request.form['specializations']
+        healthworker.availability = request.form['availability']
+        healthworker.location = request.form['location']
+        healthworker.worker_type = request.form['worker_type']
+        healthworker.status = request.form['status']
+        
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred. Please try again.', 'danger')
+            print(str(e))
+        
+        return redirect(url_for('healthworker_dashboard', id=healthworker.id))
 
+    return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
 if __name__ == '__main__':
     app.run(debug=True)
