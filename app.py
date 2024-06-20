@@ -6,6 +6,7 @@ from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required
+from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
 import os
@@ -30,6 +31,7 @@ login_manager.login_view = 'login'
 migrate = Migrate(app, db)
 
 class HealthWorker(UserMixin, db.Model):
+    __tablename__ = 'health_worker'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -48,8 +50,10 @@ class HealthWorker(UserMixin, db.Model):
     location = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)  
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    # assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
+    # assigned_facility = db.relationship('Facility', backref='assigned_workers')
     assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
-    assigned_facility = db.relationship('Facility', backref='assigned_workers')
+    assigned_facility = relationship('Facility', back_populates='assigned_workers', foreign_keys=[assigned_facility_id])
 
     @property
     def facility(self):
@@ -64,6 +68,7 @@ class HealthWorker(UserMixin, db.Model):
         db.session.commit()
 
 class Facility(db.Model):
+    __tablename__ = 'facility'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), nullable=False, unique=True)
@@ -71,7 +76,8 @@ class Facility(db.Model):
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
-    health_workers = db.relationship('HealthWorker', backref='facility')
+    # health_workers = db.relationship('HealthWorker', backref='facility')
+    assigned_workers = relationship('HealthWorker', back_populates='assigned_facility', foreign_keys='HealthWorker.assigned_facility_id')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -112,7 +118,7 @@ def register_healthworker():
             db.session.add(new_healthworker)
             db.session.commit()
             flash('Registration successful! Please wait for admin approval.')
-            return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))
+            return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))  # Redirect to health worker dashboard
         except IntegrityError:
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
@@ -138,7 +144,7 @@ def register_facility():
             db.session.add(new_facility)
             db.session.commit()
             flash('Registration successful! You can now login.')
-            return redirect(url_for('facility_dashboard', id=new_facility.id))
+            return redirect(url_for('facility_dashboard', id=new_facility.id))  # Redirect to facility dashboard
         except IntegrityError:
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
@@ -148,8 +154,11 @@ def register_facility():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        user = HealthWorker.query.filter_by(email=request.form['email']).first()
-        if user and check_password_hash(user.password_hash, request.form['password']):
+        email = request.form['email']
+        password = request.form['password']
+
+        user = HealthWorker.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password_hash, password):
             login_user(user)
             flash('Login successful!', 'success')
             if user.worker_type == 'admin':
