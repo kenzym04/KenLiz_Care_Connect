@@ -91,6 +91,13 @@ def index():
 def register_healthworker():
     if request.method == 'POST':
         email = request.form['email']
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        
+        if password != confirm_password:
+            flash('Passwords do not match. Please try again.', 'danger')
+            return redirect(url_for('register_healthworker'))
+
         existing_healthworker = HealthWorker.query.filter_by(email=email).first()
         if existing_healthworker:
             flash('Email already registered. Please use a different email address.', 'danger')
@@ -112,7 +119,7 @@ def register_healthworker():
             certifications=request.form['certifications'],
             photo=request.form['photo'],
             location=request.form['location'],
-            password_hash=generate_password_hash(request.form['password'])
+            password_hash=generate_password_hash(password)
         )
         try:
             db.session.add(new_healthworker)
