@@ -339,10 +339,34 @@ def delete_facility(id):
     flash('Facility deleted successfully.')
     return redirect(url_for('admin_dashboard'))
 
-@app.route('/healthworker_dashboard/<int:id>')
-@login_required
+@app.route('/healthworker-dashboard/<int:id>', methods=['GET', 'POST'])
 def healthworker_dashboard(id):
     healthworker = HealthWorker.query.get_or_404(id)
+
+    if request.method == 'POST':
+        healthworker.name = request.form['name']
+        healthworker.email = request.form['email']
+        healthworker.phone = request.form['phone']
+        healthworker.address = request.form['address']
+        healthworker.qualifications = request.form['qualifications']
+        healthworker.experience = request.form['experience']
+        healthworker.specializations = request.form['specializations']
+        healthworker.availability = request.form['availability']
+        healthworker.id_number = request.form['id_number']
+        healthworker.cv = request.form['cv']
+        healthworker.certifications = request.form['certifications']
+        healthworker.photo = request.form['photo']
+        healthworker.location = request.form['location']
+        healthworker.worker_type = request.form['worker_type']  # Ensure worker_type is updated
+
+        try:
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while updating profile.', 'danger')
+            print(str(e))
+
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
 @app.route('/facility_dashboard/<int:facility_id>')
