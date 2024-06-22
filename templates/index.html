@@ -185,7 +185,7 @@
                         <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
                     </div>
                     <div class="registration-card">
-                        <h3>Register as a Health Facility or Private</h3>
+                        <h3>Register as a Healthcare Facility or Home/Patient</h3>
                         <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
                         <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
                     </div>
@@ -195,7 +195,7 @@
                         <p>We offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Enhance your career while making a difference in the lives of those you serve.</p>
                     </div>
                     <div class="registration-card">
-                        <h3>Register as a Health Worker</h3>
+                        <h3>Register as a Healthcare Worker</h3>
                         <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
                         <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
                     </div>
@@ -270,6 +270,4 @@
             document.getElementById("chatPopup").style.display = "none";
         }
     </script>
-    <a href="{{ url_for('login') }}">Health Worker Login</a>
-    <a href="{{ url_for('facility_login') }}">Facility Login</a>
 {% endblock %}
