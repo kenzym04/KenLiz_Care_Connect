@@ -52,7 +52,7 @@
         <h3>Profile Details</h3>
         <form method="POST" action="{{ url_for('healthworker_update_profile', id=healthworker.id) }}">
             <div class="form-group">
-                <label for="name">Name:</label>
+                <label for="name">Full Name:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ healthworker.name }}" required>
             </div>
             <div class="form-group">
@@ -60,24 +60,77 @@
                 <input type="email" class="form-control" id="email" name="email" value="{{ healthworker.email }}" required>
             </div>
             <div class="form-group">
-                <label for="phone">Phone:</label>
-                <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" required>
+                <label for="phone">Phone Number: <small class="form-text">Kindly ensure your phone number is in international format (e.g., +1234567890)</small></label>
+                <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" placeholder="+1234567890" required>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
                 <input type="text" class="form-control" id="address" name="address" value="{{ healthworker.address }}" required>
+                <small id="addressHelp" class="form-text text-muted">Maximum 255 characters.</small>
             </div>
             <div class="form-group">
                 <label for="qualifications">Qualifications:</label>
-                <textarea class="form-control" id="qualifications" name="qualifications" rows="3" required>{{ healthworker.qualifications }}</textarea>
+                <select class="form-control" id="qualifications" name="qualifications" required>
+                    <option value="High School Diploma" {% if healthworker.qualifications == 'High School Diploma' %}selected{% endif %}>High School Diploma</option>
+                    <option value="Certificate" {% if healthworker.qualifications == 'Certificate' %}selected{% endif %}>Certificate</option>
+                    <option value="Diploma" {% if healthworker.qualifications == 'Diploma' %}selected{% endif %}>Diploma</option>
+                    <option value="Associate Degree" {% if healthworker.qualifications == 'Associate Degree' %}selected{% endif %}>Associate Degree</option>
+                    <option value="Bachelor's Degree" {% if healthworker.qualifications == 'Bachelor\'s Degree' %}selected{% endif %}>Bachelor's Degree</option>
+                    <option value="Master's Degree" {% if healthworker.qualifications == 'Master\'s Degree' %}selected{% endif %}>Master's Degree</option>
+                    <option value="Doctorate (PhD)" {% if healthworker.qualifications == 'Doctorate (PhD)' %}selected{% endif %}>Doctorate (PhD)</option>
+                    <option value="Professional Degree" {% if healthworker.qualifications == 'Professional Degree' %}selected{% endif %}>Professional Degree</option>
+                </select>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="experience">Experience:</label>
-                <textarea class="form-control" id="experience" name="experience" rows="3" required>{{ healthworker.experience }}</textarea>
+                <select class="form-control" id="experience" name="experience" required>
+                    <option value="Less than 1 year">Less than 1 year</option>
+                    <option value="1-2 years">1-2 years</option>
+                    <option value="3-5 years">3-5 years</option>
+                    <option value="6-10 years">6-10 years</option>
+                    <option value="More than 10 years">More than 10 years</option>
+                </select>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="specializations">Specializations:</label>
-                <input type="text" class="form-control" id="specializations" name="specializations" value="{{ healthworker.specializations }}">
+                <select class="form-control" id="specializations" name="specializations">
+                    <option value="Not applicable">---</option>
+                    <option value="Allergy and Immunology">Allergy and Immunology</option>
+                    <option value="Anesthesiology">Anesthesiology</option>
+                    <option value="Cardiology">Cardiology</option>
+                    <option value="Dermatology">Dermatology</option>
+                    <option value="Emergency Medicine">Emergency Medicine</option>
+                    <option value="Endocrinology">Endocrinology</option>
+                    <option value="Family Medicine">Family Medicine</option>
+                    <option value="Gastroenterology">Gastroenterology</option>
+                    <option value="Geriatrics">Geriatrics</option>
+                    <option value="Hematology">Hematology</option>
+                    <option value="Infectious Disease">Infectious Disease</option>
+                    <option value="Internal Medicine">Internal Medicine</option>
+                    <option value="Medical Genetics">Medical Genetics</option>
+                    <option value="Nephrology">Nephrology</option>
+                    <option value="Neurology">Neurology</option>
+                    <option value="Obstetrics and Gynecology">Obstetrics and Gynecology</option>
+                    <option value="Oncology">Oncology</option>
+                    <option value="Ophthalmology">Ophthalmology</option>
+                    <option value="Orthopedics">Orthopedics</option>
+                    <option value="Otolaryngology (ENT)">Otolaryngology (ENT)</option>
+                    <option value="Pathology">Pathology</option>
+                    <option value="Pediatrics">Pediatrics</option>
+                    <option value="Physical Medicine and Rehabilitation">Physical Medicine and Rehabilitation</option>
+                    <option value="Plastic Surgery">Plastic Surgery</option>
+                    <option value="Psychiatry">Psychiatry</option>
+                    <option value="Pulmonology">Pulmonology</option>
+                    <option value="Radiology">Radiology</option>
+                    <option value="Rheumatology">Rheumatology</option>
+                    <option value="Sleep Medicine">Sleep Medicine</option>
+                    <option value="Sports Medicine">Sports Medicine</option>
+                    <option value="Surgery (General Surgery)">Surgery (General Surgery)</option>
+                    <option value="Thoracic Surgery">Thoracic Surgery</option>
+                    <option value="Urology">Urology</option>
+                    <option value="Vascular Surgery">Vascular Surgery</option>
+                    <option value="Other">Other</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="availability">Availability:</label>
