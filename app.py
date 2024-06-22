@@ -29,6 +29,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 migrate = Migrate(app, db)
+login_manager.login_view = 'facility_login'
 
 class HealthWorker(UserMixin, db.Model):
     __tablename__ = 'health_worker'
@@ -50,8 +51,6 @@ class HealthWorker(UserMixin, db.Model):
     location = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)  
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
-    # assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
-    # assigned_facility = db.relationship('Facility', backref='assigned_workers')
     assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'))
     assigned_facility = relationship('Facility', back_populates='assigned_workers', foreign_keys=[assigned_facility_id])
 
@@ -76,12 +75,45 @@ class Facility(db.Model):
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
-    # health_workers = db.relationship('HealthWorker', backref='facility')
+    role = db.Column(db.String(50), nullable=False, default='facility')
     assigned_workers = relationship('HealthWorker', back_populates='assigned_facility', foreign_keys='HealthWorker.assigned_facility_id')
+    password_hash = db.Column(db.String(128), nullable=False)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+    
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @property
+    def is_active(self):
+        # For simplicity, assuming all facilities are active. Adjust as needed.
+        return True
+
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return str(self.id)
 
 @login_manager.user_loader
 def load_user(user_id):
     return HealthWorker.query.get(int(user_id))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Facility.query.get(int(user_id))
 
 @app.route('/')
 def index():
@@ -140,23 +172,48 @@ def register_facility():
             flash('Email already registered. Please use a different email address.', 'danger')
             return redirect(url_for('register_facility'))
 
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+
+        if password != confirm_password:
+            flash('Passwords do not match. Please try again.', 'danger')
+            return redirect(url_for('register_facility'))
+
         new_facility = Facility(
             name=request.form['name'],
             email=request.form['email'],
             phone=request.form['phone'],
             address=request.form['address'],
             location=request.form['location'],
+            role='facility'
         )
+        new_facility.set_password(password)
         try:
             db.session.add(new_facility)
             db.session.commit()
-            flash('Registration successful! You can now login.')
-            return redirect(url_for('facility_dashboard', id=new_facility.id))  # Redirect to facility dashboard
+            flash('Registration successful! You can now log in.', 'success')
+            # Redirect to facility dashboard with the newly created facility's id
+            return redirect(url_for('facility_dashboard', facility_id=new_facility.id))
         except IntegrityError:
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('register_facility'))
     return render_template('register_facility.html')
+
+@app.route('/facility-login', methods=['GET', 'POST'])
+def facility_login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = Facility.query.filter_by(email=email).first()
+        
+        if user and user.check_password(password):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('facility_dashboard', facility_id=user.id))  # Specify facility_id
+        else:
+            flash('Invalid email or password. Please try again.', 'danger')
+    return render_template('facility_login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -288,16 +345,16 @@ def healthworker_dashboard(id):
     healthworker = HealthWorker.query.get_or_404(id)
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
-@app.route('/facility_dashboard/<int:id>')
+@app.route('/facility_dashboard/<int:facility_id>')
 @login_required
-def facility_dashboard(id):
-    facility = Facility.query.get_or_404(id)
+def facility_dashboard(facility_id):
+    facility = Facility.query.get_or_404(facility_id)
     return render_template('facility_dashboard.html', facility=facility)
 
-@app.route('/update_facility_profile/<int:id>', methods=['POST'])
+@app.route('/update_facility_profile/<int:facility_id>', methods=['POST'])
 @login_required
-def update_facility_profile(id):
-    facility = Facility.query.get_or_404(id)
+def update_facility_profile(facility_id):
+    facility = Facility.query.get_or_404(facility_id)
     if request.method == 'POST':
         facility.name = request.form['name']
         facility.email = request.form['email']
@@ -312,7 +369,10 @@ def update_facility_profile(id):
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
         
-        return redirect(url_for('facility_dashboard', id=facility.id))
+        return redirect(url_for('facility_dashboard', facility_id=facility.id))
+
+    # Handle GET request (if needed)
+    return render_template('facility_dashboard.html', facility=facility)
     
 @app.route('/healthworker_update_profile/<int:id>', methods=['GET', 'POST'])
 @login_required

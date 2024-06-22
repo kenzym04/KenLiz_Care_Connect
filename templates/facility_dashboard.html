@@ -46,7 +46,7 @@
 
     <div class="profile-section">
         <h3>Facility Profile</h3>
-        <form method="POST" action="{{ url_for('update_facility_profile', id=facility.id) }}">
+        <form method="POST" action="{{ url_for('update_facility_profile', facility_id=facility.id) }}">
             <div class="form-group mb-3">
                 <label for="name">Facility Name:</label>
                 <input type="text" class="form-control" id="name" name="name" value="{{ facility.name }}" required>

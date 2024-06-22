@@ -1,8 +1,8 @@
 """new migration
 
-Revision ID: 15dbadb905d9
+Revision ID: 4b16a402cdf2
 Revises: 
-Create Date: 2024-06-21 15:07:58.255907
+Create Date: 2024-06-22 11:44:39.780383
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '15dbadb905d9'
+revision = '4b16a402cdf2'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,6 +26,8 @@ def upgrade():
     sa.Column('address', sa.String(length=200), nullable=False),
     sa.Column('location', sa.String(length=100), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
+    sa.Column('role', sa.String(length=50), nullable=False),
+    sa.Column('password_hash', sa.String(length=128), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -49,9 +51,6 @@ def upgrade():
     sa.Column('password_hash', sa.String(length=128), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('assigned_facility_id', sa.Integer(), nullable=True),
-    sa.Column('email_verified', sa.Boolean(), nullable=True),
-    sa.Column('email_verification_token', sa.String(length=128), nullable=True),
-    sa.Column('email_verification_expiration', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['assigned_facility_id'], ['facility.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Facility Login{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f8f9fa;
+    }
+
+    h2 {
+        color: #343a40;
+    }
+
+    .form-control {
+        border-radius: 0.25rem;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+<div class="container mt-5 mb-5 form-container">
+    <h2 class="text-center mb-4">Facility Login</h2>
+    <form method="POST" action="{{ url_for('facility_login') }}">
+        <div class="form-group mb-3">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group mb-3">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Login</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

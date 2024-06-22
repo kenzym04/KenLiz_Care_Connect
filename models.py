@@ -34,8 +34,10 @@ class Facility(db.Model):
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
     health_workers = db.relationship('HealthWorker', backref='facility', lazy=True)
+    
+    def is_facility(self):
+        return True  # You would implement your own logic here based on your requirements
 
 # Initialize Flask-Migrate
 migrate = Migrate()

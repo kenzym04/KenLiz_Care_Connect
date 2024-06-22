@@ -16,9 +16,6 @@
         display: flex;
         align-items: center;
         text-align: center;
-        /* 
-        justify-content: space-between;
-         */
     }
 
     header img {
@@ -175,7 +172,6 @@
 </head>
 <body>
     <header>
-        <!-- <p style="display:inline-block;"> -->
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="KenLiz CareConnect Logo">
         <h1>Welcome to MediConnect International</h1>
     </header>
@@ -211,7 +207,6 @@
 
     <section class="reviews">
         <div class="container">
-            <!-- <h8>Reviews</h8> -->
             <ul>
                 <li>"Excellent service! Highly recommended." - Rafiki Health Facility</li>
                 <li>"Professional and reliable. They exceeded my expectations." - Tumaini Health Facility</li>
@@ -275,4 +270,6 @@
             document.getElementById("chatPopup").style.display = "none";
         }
     </script>
+    <a href="{{ url_for('login') }}">Health Worker Login</a>
+    <a href="{{ url_for('facility_login') }}">Facility Login</a>
 {% endblock %}
