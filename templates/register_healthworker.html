@@ -35,10 +35,31 @@
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
+    .form-text {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
 </style>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(function(input) {
+            input.addEventListener('change', function() {
+                if (input.files.length > 0) {
+                    var file = input.files[0];
+                    if (file.size > 2 * 1024 * 1024) { // 2 MB (max size)
+                        alert('File size must be less than 2 MB');
+                        input.value = '';
+                    }
+                }
+            });
+        });
+    });
+</script>
 <div class="container mt-5 mb-5 form-container">
     <h2 class="text-center mb-4">Register as a Healthcare Worker</h2>
-    <form method="POST" action="{{ url_for('register_healthworker') }}">
+    <form method="POST" action="{{ url_for('register_healthworker') }}" enctype="multipart/form-data">
         <div class="form-group mb-3">
             <label for="name">Full Name:</label>
             <input type="text" class="form-control" id="name" name="name" maxlength="100" required>
@@ -52,7 +73,7 @@
             <input type="text" class="form-control" id="phone" name="phone" placeholder="+1234567890" required>
         </div>
         <div class="form-group mb-3">
-            <label for="address">Address: <small id="addressHelp" class="form-text text-muted">Maximum 255 characters.</small></label>
+            <label for="address">Address: <small class="form-text">Maximum 255 characters.</small></label>
             <input type="text" class="form-control" id="address" name="address" maxlength="255" required>
         </div>
         <div class="form-group mb-3">
@@ -150,18 +171,18 @@
         <div class="form-group mb-3">
             <label for="id_number">ID Number / SSN:</label>
             <input type="text" class="form-control" id="id_number" name="id_number" maxlength="20" pattern="\d{1,20}" required>
-        </div>        
-        <div class="form-group mb-3">
-            <label for="cv">CV:</label>
-            <input type="text" class="form-control" id="cv" name="cv" required>
         </div>
         <div class="form-group mb-3">
-            <label for="certifications">Certifications:</label>
-            <input type="text" class="form-control" id="certifications" name="certifications">
+            <label for="cv">CV: <small class="form-text">Optional, max size 2MB, allowed types: .pdf, .doc, .docx</small></label>
+            <input type="file" class="form-control" id="cv" name="cv" accept=".pdf,.doc,.docx">
         </div>
         <div class="form-group mb-3">
-            <label for="photo">Photo:</label>
-            <input type="text" class="form-control" id="photo" name="photo">
+            <label for="certifications">Certifications (max 3 files): <small class="form-text">Optional, max size 2MB each, allowed types: .pdf, .doc, .docx</small></label>
+            <input type="file" class="form-control" id="certifications" name="certifications" accept=".pdf,.doc,.docx" multiple>
+        </div>
+        <div class="form-group mb-3">
+            <label for="photo">Photo: <small class="form-text">Optional, max size 2MB, allowed types: .jpg, .jpeg, .png</small></label>
+            <input type="file" class="form-control" id="photo" name="photo" accept=".jpg,.jpeg,.png">
         </div>
         <div class="form-group mb-3">
             <label for="location">Location:</label>

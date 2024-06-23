@@ -178,6 +178,37 @@
                 <label for="status">Status:</label>
                 <input type="text" class="form-control" id="status" name="status" value="{{ healthworker.status }}" readonly>
             </div>
+
+            <!-- CV Upload -->
+            <div class="form-group">
+                <label for="cv">CV Upload:</label>
+                {% if healthworker.cv %}
+                    <p><a href="{{ url_for('download_cv', filename=healthworker.cv) }}" target="_blank">Download CV</a></p>
+                {% else %}
+                    <p class="text-warning">Please upload your CV <a href="{{ url_for('upload_cv') }}">here</a>.</p>
+                {% endif %}
+            </div>
+
+            <!-- Certification Upload -->
+            <div class="form-group">
+                <label for="certification">Certification Upload:</label>
+                {% if healthworker.certification %}
+                    <p><a href="{{ url_for('download_certification', filename=healthworker.certification) }}" target="_blank">Download Certification</a></p>
+                {% else %}
+                    <p class="text-warning">Please upload your Certification <a href="{{ url_for('upload_certification') }}">here</a>.</p>
+                {% endif %}
+            </div>
+
+            <!-- Profile Picture -->
+            <div class="form-group">
+                <label for="profile_picture">Profile Picture:</label>
+                {% if healthworker.profile_picture %}
+                    <img src="{{ url_for('download_profile_picture', filename=healthworker.profile_picture) }}" alt="Profile Picture" class="img-fluid">
+                {% else %}
+                    <p class="text-warning">Please upload your Profile Picture <a href="{{ url_for('upload_profile_picture') }}">here</a>.</p>
+                {% endif %}
+            </div>
+
             <div class="form-group text-center">
                 <button type="submit" class="btn btn-primary btn-lg">Update Profile</button>
             </div>

@@ -1,5 +1,5 @@
 from asyncio import Task
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for, flash, session
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
@@ -9,8 +9,10 @@ from flask_login import LoginManager, UserMixin, login_required
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
+from werkzeug.utils import secure_filename
 import os
 from dotenv import load_dotenv
+UPLOAD_FOLDER = 'static/uploads'
 
 load_dotenv()
 
@@ -22,6 +24,8 @@ app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT', 25))
 app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS', 'True') == 'True'
 app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME', 'default_username')
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD', 'default_password')
+app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db = SQLAlchemy(app)
 mail = Mail(app)
@@ -106,6 +110,78 @@ class Facility(db.Model):
 
     def get_id(self):
         return str(self.id)
+    
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+@app.route('/upload_cv', methods=['POST'])
+def upload_cv():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        flash('File successfully uploaded')
+        # Save filename to healthworker model or database record
+        return redirect(url_for('dashboard'))  # Redirect to dashboard or wherever after upload
+    else:
+        flash('Invalid file format. Allowed formats are pdf, png, jpg, jpeg, gif')
+        return redirect(request.url)
+    
+@app.route('/download_cv/<filename>')
+def download_cv(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/upload_certification', methods=['POST'])
+def upload_certification():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        flash('File successfully uploaded')
+        # Save filename to healthworker model or database record
+        return redirect(url_for('dashboard'))  # Redirect to dashboard or wherever after upload
+    else:
+        flash('Invalid file format. Allowed formats are pdf, png, jpg, jpeg, gif')
+        return redirect(request.url)
+    
+@app.route('/download_certifications/<filename>')
+def download_certifications(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/upload_profile_picture', methods=['POST'])
+def upload_profile_picture():
+    if 'file' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+    file = request.files['file']
+    if file.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        flash('File successfully uploaded')
+        # Save filename to healthworker model or database record
+        return redirect(url_for('dashboard'))  # Redirect to dashboard or wherever after upload
+    else:
+        flash('Invalid file format. Allowed formats are pdf, png, jpg, jpeg, gif')
+        return redirect(request.url)
+    
+@app.route('/download_profile_picture/<filename>')
+def download_profile_picture(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -122,6 +198,7 @@ def index():
 @app.route('/register-healthworker', methods=['GET', 'POST'])
 def register_healthworker():
     if request.method == 'POST':
+        # Ensure form fields are correctly fetched
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
@@ -130,14 +207,40 @@ def register_healthworker():
             flash('Passwords do not match. Please try again.', 'danger')
             return redirect(url_for('register_healthworker'))
 
+        # Check if email is already registered
         existing_healthworker = HealthWorker.query.filter_by(email=email).first()
         if existing_healthworker:
             flash('Email already registered. Please use a different email address.', 'danger')
             return redirect(url_for('register_healthworker'))
         
+        # Handle file uploads: CV, certifications, photo
+        cv_file = request.files['cv']
+        certifications_files = request.files.getlist('certifications')
+        photo_file = request.files['photo']
+
+        # Save files to a folder (optional)
+        cv_filename = secure_filename(cv_file.filename)
+        cv_file.save(os.path.join(app.config['UPLOAD_FOLDER'], cv_filename))
+
+        # Save certifications (if any)
+        certifications_filenames = []
+        for cert_file in certifications_files:
+            if cert_file:
+                cert_filename = secure_filename(cert_file.filename)
+                certifications_filenames.append(cert_filename)
+                cert_file.save(os.path.join(app.config['UPLOAD_FOLDER'], cert_filename))
+
+        # Save photo (if provided)
+        if photo_file:
+            photo_filename = secure_filename(photo_file.filename)
+            photo_file.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
+        else:
+            photo_filename = None
+        
+        # Create new HealthWorker object
         new_healthworker = HealthWorker(
             name=request.form['name'],
-            email=request.form['email'],
+            email=email,
             phone=request.form['phone'],
             address=request.form['address'],
             qualifications=request.form['qualifications'],
@@ -147,21 +250,23 @@ def register_healthworker():
             worker_type=request.form['worker_type'],
             status='Pending',
             id_number=request.form['id_number'],
-            cv=request.form['cv'],
-            certifications=request.form['certifications'],
-            photo=request.form['photo'],
+            cv=cv_filename,
+            certifications=', '.join(certifications_filenames),
+            photo=photo_filename,
             location=request.form['location'],
             password_hash=generate_password_hash(password)
         )
+        
         try:
             db.session.add(new_healthworker)
             db.session.commit()
-            flash('Registration successful! Please wait for admin approval.')
-            return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))  # Redirect to health worker dashboard
+            flash('Registration successful! Please wait for admin approval.', 'success')
+            return redirect(url_for('healthworker_dashboard', id=new_healthworker.id))
         except IntegrityError:
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('register_healthworker'))
+
     return render_template('register_healthworker.html')
 
 @app.route('/register-facility', methods=['GET', 'POST'])
@@ -234,7 +339,7 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-# Admin Dashboard Route
+    # Admin Dashboard Route
 @app.route('/admin')
 def admin_dashboard():
     location = request.args.get('location')
