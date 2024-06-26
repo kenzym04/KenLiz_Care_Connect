@@ -6,6 +6,7 @@ from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, UserMixin, login_required
+from models import Facility
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
 from datetime import UTC, datetime
@@ -34,7 +35,6 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 migrate = Migrate(app, db)
 login_manager.login_view = 'facility_login'
-app.secret_key = app.config['SECRET_KEY']
 
 class HealthWorker(UserMixin, db.Model):
     __tablename__ = 'health_worker'
@@ -138,43 +138,6 @@ def upload_cv():
 def download_cv(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-@app.route('/replace_cv', methods=['GET', 'POST'])
-def replace_cv():
-    if request.method == 'POST':
-        try:
-            healthworker_id = int(request.form['healthworker_id'])  # Convert ID to integer
-            cv_file = request.files['cv']
-
-            if cv_file and allowed_file(cv_file.filename):
-                # Fetch current health worker object
-                healthworker = HealthWorker.query.get(healthworker_id)
-                if not healthworker:
-                    flash('Health worker not found.', 'danger')
-                    return redirect(url_for('replace_cv'))
-
-                # Delete current CV if exists
-                current_cv_path = os.path.join(app.config['UPLOAD_FOLDER'], healthworker.cv)
-                if os.path.exists(current_cv_path):
-                    os.remove(current_cv_path)
-
-                # Save new CV
-                cv_filename = secure_filename(cv_file.filename)
-                cv_file.save(os.path.join(app.config['UPLOAD_FOLDER'], cv_filename))
-
-                # Update health worker object with new CV filename
-                healthworker.cv = cv_filename
-                db.session.commit()
-
-                flash('CV replaced successfully.', 'success')
-                return redirect(url_for('healthworker_dashboard', id=healthworker.id))
-            else:
-                flash('Invalid file format. Allowed formats are .pdf, .doc, .docx.', 'danger')
-
-        except ValueError:
-            flash('Invalid health worker ID.', 'danger')
-
-    return render_template('replace_cv.html')
-
 @app.route('/upload_certification', methods=['POST'])
 def upload_certification():
     if 'file' not in request.files:
@@ -258,20 +221,20 @@ def register_healthworker():
         certifications_files = request.files.getlist('certifications')
         photo_file = request.files['photo']
 
-        # Save files to a folder
+        # Save files to a folder (optional)
         cv_filename = secure_filename(cv_file.filename)
         cv_file.save(os.path.join(app.config['UPLOAD_FOLDER'], cv_filename))
 
         # Save certifications (if any)
         certifications_filenames = []
         for cert_file in certifications_files:
-            if cert_file and allowed_file(cert_file.filename):
+            if cert_file:
                 cert_filename = secure_filename(cert_file.filename)
                 certifications_filenames.append(cert_filename)
                 cert_file.save(os.path.join(app.config['UPLOAD_FOLDER'], cert_filename))
 
         # Save photo (if provided)
-        if photo_file and allowed_file(photo_file.filename):
+        if photo_file:
             photo_filename = secure_filename(photo_file.filename)
             photo_file.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
         else:
@@ -336,7 +299,7 @@ def register_facility():
         try:
             db.session.add(new_facility)
             db.session.commit()
-            flash('Registration successful! You can now log in.', 'success')
+            flash('Registration successful! Welcome to your dashboard.', 'success')
             # Redirect to facility dashboard with the newly created facility's id
             return redirect(url_for('facility_dashboard', facility_id=new_facility.id))
         except IntegrityError:
@@ -358,7 +321,7 @@ def facility_login():
             return redirect(url_for('facility_dashboard', facility_id=user.id))  # Specify facility_id
         else:
             flash('Invalid email or password. Please try again.', 'danger')
-    return render_template('facility_dashboard.html')
+    return render_template('facility_login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -503,8 +466,7 @@ def healthworker_dashboard(id):
 
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
-@app.route('/facility_dashboard/<int:facility_id>')
-@login_required
+@app.route('/facility-dashboard/<int:facility_id>')
 def facility_dashboard(facility_id):
     facility = Facility.query.get_or_404(facility_id)
     return render_template('facility_dashboard.html', facility=facility)
@@ -513,6 +475,7 @@ def facility_dashboard(facility_id):
 @login_required
 def update_facility_profile(facility_id):
     facility = Facility.query.get_or_404(facility_id)
+    
     if request.method == 'POST':
         facility.name = request.form['name']
         facility.email = request.form['email']
@@ -529,7 +492,6 @@ def update_facility_profile(facility_id):
         
         return redirect(url_for('facility_dashboard', facility_id=facility.id))
 
-    # Handle GET request (if needed)
     return render_template('facility_dashboard.html', facility=facility)
     
 @app.route('/healthworker_update_profile/<int:id>', methods=['GET', 'POST'])

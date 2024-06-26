@@ -22,7 +22,7 @@ class HealthWorker(db.Model):
     photo = db.Column(db.String(100), nullable=True)
     location = db.Column(db.String(100), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(UTC+3))
+    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
     assigned_facility_id = db.Column(db.Integer, db.ForeignKey('facility.id'), nullable=True)
     assigned_facility = db.relationship('Facility', foreign_keys=[assigned_facility_id], backref=db.backref('assigned_workers', lazy=True))
 
@@ -33,7 +33,7 @@ class Facility(db.Model):
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
     location = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(UTC+3))
+    created_at = db.Column(db.DateTime, default=datetime.now(UTC))
     health_workers = db.relationship('HealthWorker', backref='facility', lazy=True)
     
     def is_facility(self):

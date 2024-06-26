@@ -22,6 +22,10 @@
         color: #343a40;
     }
 
+    small {
+        color: red;
+    }
+
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
@@ -45,7 +49,7 @@
     <h2 class="text-center mb-4">{{ facility.name }}, Welcome to your dashboard</h2>
 
     <div class="profile-section">
-        <h3>Facility Profile</h3>
+        <h3>Review Your Facility's Profile</h3> <small>Update your profile NOW! Make sure it's accurate to streamline workforce assignment</small>
         <form method="POST" action="{{ url_for('update_facility_profile', facility_id=facility.id) }}">
             <div class="form-group mb-3">
                 <label for="name">Facility Name:</label>
@@ -53,11 +57,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="email">Email:</label>
-<<<<<<< HEAD
                 <input type="email" class="form-control" id="email" name="email" value="{{ facility.email }}" maxlength="64" required>
-=======
-                <input type="email" class="form-control" id="email" name="email" value="{{ facility.email }}" maxlength="254" required>
->>>>>>> a0348e256c9c6655dc15300f21c04aec9198e2e3
             </div>
             <div class="form-group mb-3">
                 <label for="phone">Phone Number: <small class="form-text">Kindly use international format (e.g., +1234567890).</small></label>
@@ -65,11 +65,7 @@
             </div>
             <div class="form-group mb-3">
                 <label for="address">Address:</label>
-<<<<<<< HEAD
                 <input type="text" class="form-control" id="address" name="address" value="{{ facility.address }}" maxlength="254" required>
-=======
-                <input type="text" class="form-control" id="address" name="address" value="{{ facility.address }}" maxlength="255" required>
->>>>>>> a0348e256c9c6655dc15300f21c04aec9198e2e3
             </div>
             <div class="form-group mb-3">
                 <label for="location">Location:</label>

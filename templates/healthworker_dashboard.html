@@ -22,6 +22,10 @@
         color: #343a40;
     }
 
+    small {
+        color: #e82121;
+    }
+
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
@@ -49,11 +53,10 @@
     <h2 class="text-center mb-4">{{ healthworker.name }}, Welcome to your dashboard</h2>
 
     <div class="profile-section">
-        <h3>Profile Details: Kindly review and update your profile NOW for you to get a job placement immediately</h3>
+        <h3>Review Your Profile Details: </h3><small>Update your profile NOW! Make sure it's accurate to streamline job placement</small>
         <form method="POST" action="{{ url_for('healthworker_update_profile', id=healthworker.id) }}">
             <div class="form-group">
                 <label for="name">Full Name:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ healthworker.name }}" maxlength="100" required>
                 <input type="text" class="form-control" id="name" name="name" value="{{ healthworker.name }}" maxlength="100" required>
             </div>
             <div class="form-group">
@@ -63,13 +66,10 @@
             <div class="form-group">
                 <label for="phone">Phone Number: <small class="form-text">Kindly ensure your phone number is in international format (e.g., +1234567890)</small></label>
                 <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" placeholder="+1234567890" maxlength="25" required>
-                <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" placeholder="+1234567890" maxlength="25" required>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
                 <input type="text" class="form-control" id="address" name="address" value="{{ healthworker.address }}" maxlength="255" required>
-                <input type="text" class="form-control" id="address" name="address" value="{{ healthworker.address }}" maxlength="255" required>
-                <small id="addressHelp" class="form-text text-muted">Maximum 255 characters.</small>
             </div>
             <div class="form-group">
                 <label for="qualifications">Qualifications:</label>
@@ -179,16 +179,15 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="status">Status: <small>This is system generated. You can't edit this part, the Admin will update ASAP</small></label>
+                <label for="status">Status: <small>This is system generated. You can't edit this part, it will auto update after placement</small></label>
                 <input type="text" class="form-control" id="status" name="status" value="{{ healthworker.status }}" readonly>
             </div>
 
-            <!-- Update the CV section in health_worker_dashboard.html -->
+            <!-- CV Upload -->
             <div class="form-group">
                 <label for="cv">CV Upload:</label>
                 {% if healthworker.cv %}
                     <p><a href="{{ url_for('download_cv', filename=healthworker.cv) }}" target="_blank">Download CV</a></p>
-                    <p><a href="{{ url_for('replace_cv') }}">Replace CV</a></p> <!-- Link to replace CV -->
                 {% else %}
                     <p class="text-warning">Please upload your CV <a href="{{ url_for('upload_cv') }}">here</a>.</p>
                 {% endif %}
