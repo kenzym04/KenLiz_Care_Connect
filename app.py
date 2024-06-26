@@ -198,7 +198,9 @@ def index():
 @app.route('/register-healthworker', methods=['GET', 'POST'])
 def register_healthworker():
     if request.method == 'POST':
-        # Ensure form fields are correctly fetched
+        # Debugging: Print the form data
+        print(request.form)
+        
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
@@ -244,7 +246,7 @@ def register_healthworker():
             phone=request.form['phone'],
             address=request.form['address'],
             qualifications=request.form['qualifications'],
-            experience=request.form['experience'],
+            experience=request.form['experience'],  # Ensure this is being fetched
             specializations=request.form['specializations'],
             availability='Available',
             worker_type=request.form['worker_type'],
@@ -362,17 +364,6 @@ def admin_dashboard():
         healthworkers = [hw for hw in healthworkers if any(task.healthworker_id == hw.id for task in tasks)]
 
     return render_template('admin_dashboard.html', healthworkers=healthworkers, facilities=facilities)
-
-@app.route('/healthworker-update/<int:id>', methods=['GET', 'POST'])
-@login_required
-def healthworker_update(id):
-    healthworker = HealthWorker.query.get_or_404(id)
-    if request.method == 'POST':
-        healthworker.availability = request.form['availability']
-        db.session.commit()
-        flash('Availability updated successfully.')
-        return redirect(url_for('admin_dashboard'))
-    return render_template('healthworker_update.html', healthworker=healthworker)
 
 # Assign Task Route
 @app.route('/assign_task/<int:healthworker_id>', methods=['GET', 'POST'])
@@ -528,8 +519,6 @@ def healthworker_update_profile(id):
             flash('An error occurred. Please try again.', 'danger')
             print(str(e))
         
-        return redirect(url_for('healthworker_dashboard', id=healthworker.id))
-
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
 @app.route('/assign_healthworker/<int:healthworker_id>', methods=['GET', 'POST'])

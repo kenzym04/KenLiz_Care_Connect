@@ -41,19 +41,19 @@
     <form method="POST" action="{{ url_for('register_facility') }}">
         <div class="form-group mb-3">
             <label for="name">Facility Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" maxlength="100" required>
         </div>
         <div class="form-group mb-3">
             <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <input type="email" class="form-control" id="email" name="email" maxlength="64" required>
         </div>
         <div class="form-group mb-3">
-            <label for="phone">Phone:</label>
-            <input type="text" class="form-control" id="phone" name="phone" required>
+            <label for="phone">Phone Number: <small class="form-text">Kindly use international format (e.g., +1234567890).</small></label>
+            <input type="text" class="form-control" id="phone" name="phone" placeholder="+1234567890" maxlength="25" required>
         </div>
         <div class="form-group mb-3">
             <label for="address">Address:</label>
-            <input type="text" class="form-control" id="address" name="address" required>
+            <input type="text" class="form-control" id="address" name="address" maxlength="255" required>
         </div>
         <div class="form-group mb-3">
             <label for="location">Location:</label>
@@ -61,11 +61,11 @@
         </div>
         <div class="form-group mb-3">
             <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <input type="password" class="form-control" id="password" name="password" maxlength="64" required>
         </div>
         <div class="form-group mb-3">
             <label for="confirm_password">Confirm Password:</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+            <input type="password" class="form-control" id="confirm_password" name="confirm_password" maxlength="64" required>
         </div>
         <div class="form-group text-center">
             <button type="submit" class="btn btn-primary btn-lg">Register</button>

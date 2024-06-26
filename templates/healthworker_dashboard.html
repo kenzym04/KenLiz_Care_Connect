@@ -49,23 +49,23 @@
     <h2 class="text-center mb-4">{{ healthworker.name }}, Welcome to your dashboard</h2>
 
     <div class="profile-section">
-        <h3>Profile Details</h3>
+        <h3>Profile Details: Kindly review and update your profile NOW for you to get a job placement immediately</h3>
         <form method="POST" action="{{ url_for('healthworker_update_profile', id=healthworker.id) }}">
             <div class="form-group">
                 <label for="name">Full Name:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{ healthworker.name }}" required>
+                <input type="text" class="form-control" id="name" name="name" value="{{ healthworker.name }}" maxlength="100" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ healthworker.email }}" required>
+                <input type="email" class="form-control" id="email" name="email" value="{{ healthworker.email }}" maxlength="64" required>
             </div>
             <div class="form-group">
                 <label for="phone">Phone Number: <small class="form-text">Kindly ensure your phone number is in international format (e.g., +1234567890)</small></label>
-                <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" placeholder="+1234567890" required>
+                <input type="text" class="form-control" id="phone" name="phone" value="{{ healthworker.phone }}" placeholder="+1234567890" maxlength="25" required>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
-                <input type="text" class="form-control" id="address" name="address" value="{{ healthworker.address }}" required>
+                <input type="text" class="form-control" id="address" name="address" value="{{ healthworker.address }}" maxlength="255" required>
                 <small id="addressHelp" class="form-text text-muted">Maximum 255 characters.</small>
             </div>
             <div class="form-group">
@@ -84,54 +84,55 @@
             <div class="form-group mb-3">
                 <label for="experience">Experience:</label>
                 <select class="form-control" id="experience" name="experience" required>
-                    <option value="Less than 1 year">Less than 1 year</option>
-                    <option value="1-2 years">1-2 years</option>
-                    <option value="3-5 years">3-5 years</option>
-                    <option value="6-10 years">6-10 years</option>
-                    <option value="More than 10 years">More than 10 years</option>
+                    <option value="Less than 1 year" {% if healthworker.experience == 'Less than 1 year' %}selected{% endif %}>Less than 1 year</option>
+                    <option value="1-3 years" {% if healthworker.experience == '1-3 years' %}selected{% endif %}>1-3 years</option>
+                    <option value="3-5 years" {% if healthworker.experience == '3-5 years' %}selected{% endif %}>3-5 years</option>
+                    <option value="5-7 years" {% if healthworker.experience == '5-7 years' %}selected{% endif %}>5-7 years</option>
+                    <option value="7-10 years" {% if healthworker.experience == '7-10 years' %}selected{% endif %}>7-10 years</option>
+                    <option value="More than 10 years" {% if healthworker.experience == 'More than 10 years' %}selected{% endif %}>More than 10 years</option>
                 </select>
             </div>
             <div class="form-group mb-3">
                 <label for="specializations">Specializations:</label>
                 <select class="form-control" id="specializations" name="specializations">
-                    <option value="Not applicable">---</option>
-                    <option value="Allergy and Immunology">Allergy and Immunology</option>
-                    <option value="Anesthesiology">Anesthesiology</option>
-                    <option value="Cardiology">Cardiology</option>
-                    <option value="Dermatology">Dermatology</option>
-                    <option value="Emergency Medicine">Emergency Medicine</option>
-                    <option value="Endocrinology">Endocrinology</option>
-                    <option value="Family Medicine">Family Medicine</option>
-                    <option value="Gastroenterology">Gastroenterology</option>
-                    <option value="Geriatrics">Geriatrics</option>
-                    <option value="Hematology">Hematology</option>
-                    <option value="Infectious Disease">Infectious Disease</option>
-                    <option value="Internal Medicine">Internal Medicine</option>
-                    <option value="Medical Genetics">Medical Genetics</option>
-                    <option value="Nephrology">Nephrology</option>
-                    <option value="Neurology">Neurology</option>
-                    <option value="Obstetrics and Gynecology">Obstetrics and Gynecology</option>
-                    <option value="Oncology">Oncology</option>
-                    <option value="Ophthalmology">Ophthalmology</option>
-                    <option value="Orthopedics">Orthopedics</option>
-                    <option value="Otolaryngology (ENT)">Otolaryngology (ENT)</option>
-                    <option value="Pathology">Pathology</option>
-                    <option value="Pediatrics">Pediatrics</option>
-                    <option value="Physical Medicine and Rehabilitation">Physical Medicine and Rehabilitation</option>
-                    <option value="Plastic Surgery">Plastic Surgery</option>
-                    <option value="Psychiatry">Psychiatry</option>
-                    <option value="Pulmonology">Pulmonology</option>
-                    <option value="Radiology">Radiology</option>
-                    <option value="Rheumatology">Rheumatology</option>
-                    <option value="Sleep Medicine">Sleep Medicine</option>
-                    <option value="Sports Medicine">Sports Medicine</option>
-                    <option value="Surgery (General Surgery)">Surgery (General Surgery)</option>
-                    <option value="Thoracic Surgery">Thoracic Surgery</option>
-                    <option value="Urology">Urology</option>
-                    <option value="Vascular Surgery">Vascular Surgery</option>
-                    <option value="Other">Other</option>
+                    <option value="Not applicable" {% if healthworker.specializations == 'Not applicable' %}selected{% endif %}>---</option>
+                    <option value="Allergy and Immunology" {% if healthworker.specializations == 'Allergy and Immunology' %}selected{% endif %}>Allergy and Immunology</option>
+                    <option value="Anesthesiology" {% if healthworker.specializations == 'Anesthesiology' %}selected{% endif %}>Anesthesiology</option>
+                    <option value="Cardiology" {% if healthworker.specializations == 'Cardiology' %}selected{% endif %}>Cardiology</option>
+                    <option value="Dermatology" {% if healthworker.specializations == 'Dermatology' %}selected{% endif %}>Dermatology</option>
+                    <option value="Emergency Medicine" {% if healthworker.specializations == 'Emergency Medicine' %}selected{% endif %}>Emergency Medicine</option>
+                    <option value="Endocrinology" {% if healthworker.specializations == 'Endocrinology' %}selected{% endif %}>Endocrinology</option>
+                    <option value="Family Medicine" {% if healthworker.specializations == 'Family Medicine' %}selected{% endif %}>Family Medicine</option>
+                    <option value="Gastroenterology" {% if healthworker.specializations == 'Gastroenterology' %}selected{% endif %}>Gastroenterology</option>
+                    <option value="Geriatrics" {% if healthworker.specializations == 'Geriatrics' %}selected{% endif %}>Geriatrics</option>
+                    <option value="Hematology" {% if healthworker.specializations == 'Hematology' %}selected{% endif %}>Hematology</option>
+                    <option value="Infectious Disease" {% if healthworker.specializations == 'Infectious Disease' %}selected{% endif %}>Infectious Disease</option>
+                    <option value="Internal Medicine" {% if healthworker.specializations == 'Internal Medicine' %}selected{% endif %}>Internal Medicine</option>
+                    <option value="Medical Genetics" {% if healthworker.specializations == 'Medical Genetics' %}selected{% endif %}>Medical Genetics</option>
+                    <option value="Nephrology" {% if healthworker.specializations == 'Nephrology' %}selected{% endif %}>Nephrology</option>
+                    <option value="Neurology" {% if healthworker.specializations == 'Neurology' %}selected{% endif %}>Neurology</option>
+                    <option value="Obstetrics and Gynecology" {% if healthworker.specializations == 'Obstetrics and Gynecology' %}selected{% endif %}>Obstetrics and Gynecology</option>
+                    <option value="Oncology" {% if healthworker.specializations == 'Oncology' %}selected{% endif %}>Oncology</option>
+                    <option value="Ophthalmology" {% if healthworker.specializations == 'Ophthalmology' %}selected{% endif %}>Ophthalmology</option>
+                    <option value="Orthopedics" {% if healthworker.specializations == 'Orthopedics' %}selected{% endif %}>Orthopedics</option>
+                    <option value="Otolaryngology (ENT)" {% if healthworker.specializations == 'Otolaryngology (ENT)' %}selected{% endif %}>Otolaryngology (ENT)</option>
+                    <option value="Pathology" {% if healthworker.specializations == 'Pathology' %}selected{% endif %}>Pathology</option>
+                    <option value="Pediatrics" {% if healthworker.specializations == 'Pediatrics' %}selected{% endif %}>Pediatrics</option>
+                    <option value="Physical Medicine and Rehabilitation" {% if healthworker.specializations == 'Physical Medicine and Rehabilitation' %}selected{% endif %}>Physical Medicine and Rehabilitation</option>
+                    <option value="Plastic Surgery" {% if healthworker.specializations == 'Plastic Surgery' %}selected{% endif %}>Plastic Surgery</option>
+                    <option value="Psychiatry" {% if healthworker.specializations == 'Psychiatry' %}selected{% endif %}>Psychiatry</option>
+                    <option value="Pulmonology" {% if healthworker.specializations == 'Pulmonology' %}selected{% endif %}>Pulmonology</option>
+                    <option value="Radiology" {% if healthworker.specializations == 'Radiology' %}selected{% endif %}>Radiology</option>
+                    <option value="Rheumatology" {% if healthworker.specializations == 'Rheumatology' %}selected{% endif %}>Rheumatology</option>
+                    <option value="Sleep Medicine" {% if healthworker.specializations == 'Sleep Medicine' %}selected{% endif %}>Sleep Medicine</option>
+                    <option value="Sports Medicine" {% if healthworker.specializations == 'Sports Medicine' %}selected{% endif %}>Sports Medicine</option>
+                    <option value="Surgery (General Surgery)" {% if healthworker.specializations == 'Surgery (General Surgery)' %}selected{% endif %}>Surgery (General Surgery)</option>
+                    <option value="Thoracic Surgery" {% if healthworker.specializations == 'Thoracic Surgery' %}selected{% endif %}>Thoracic Surgery</option>
+                    <option value="Urology" {% if healthworker.specializations == 'Urology' %}selected{% endif %}>Urology</option>
+                    <option value="Vascular Surgery" {% if healthworker.specializations == 'Vascular Surgery' %}selected{% endif %}>Vascular Surgery</option>
+                    <option value="Other" {% if healthworker.specializations == 'Other' %}selected{% endif %}>Other</option>
                 </select>
-            </div>
+            </div>            
             <div class="form-group">
                 <label for="availability">Availability:</label>
                 <select class="form-control" id="availability" name="availability">
@@ -175,7 +176,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="status">Status:</label>
+                <label for="status">Status: <small>This is system generated. You can't edit this part, the Admin will update ASAP</small></label>
                 <input type="text" class="form-control" id="status" name="status" value="{{ healthworker.status }}" readonly>
             </div>
 
