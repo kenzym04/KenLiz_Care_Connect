@@ -32,8 +32,11 @@ class Facility(db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
+    country = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
+    role = db.Column(db.String(10), nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
     health_workers = db.relationship('HealthWorker', backref='facility', lazy=True)
     
     def is_facility(self):

@@ -79,7 +79,8 @@ class Facility(db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     phone = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(200), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
+    country = db.Column(db.String(100), nullable=False)
+    city = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now(UTC))
     role = db.Column(db.String(50), nullable=False, default='facility')
     assigned_workers = relationship('HealthWorker', back_populates='assigned_facility', foreign_keys='HealthWorker.assigned_facility_id')
@@ -257,7 +258,8 @@ def register_healthworker():
             cv=cv_filename,
             certifications=', '.join(certifications_filenames),
             photo=photo_filename,
-            location=request.form['location'],
+            country=request.form['country'],
+            city=request.form['city'],
             password_hash=generate_password_hash(password)
         )
         
@@ -275,6 +277,38 @@ def register_healthworker():
 
 @app.route('/register-facility', methods=['GET', 'POST'])
 def register_facility():
+    countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
+    "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", 
+    "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
+    "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+    "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", 
+    "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the", 
+    "Congo, Republic of the", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", 
+    "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor (Timor-Leste)", 
+    "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", 
+    "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", 
+    "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", 
+    "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", 
+    "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", 
+    "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", 
+    "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", 
+    "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", 
+    "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", 
+    "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", 
+    "Myanmar (Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", 
+    "Nicaragua", "Niger", "Nigeria", "North Macedonia (formerly Macedonia)", "Norway", 
+    "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", 
+    "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", 
+    "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", 
+    "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", 
+    "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", 
+    "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", 
+    "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", 
+    "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", 
+    "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", 
+    "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", 
+    "Zambia", "Zimbabwe"]
+
     if request.method == 'POST':
         existing_facility = Facility.query.filter_by(email=request.form['email']).first()
         if existing_facility:
@@ -293,7 +327,8 @@ def register_facility():
             email=request.form['email'],
             phone=request.form['phone'],
             address=request.form['address'],
-            location=request.form['location'],
+            country=request.form['country'],
+            city=request.form['city'],
             role='facility'
         )
         new_facility.set_password(password)
@@ -307,7 +342,7 @@ def register_facility():
             db.session.rollback()
             flash('An error occurred. Please try again.', 'danger')
             return redirect(url_for('register_facility'))
-    return render_template('register_facility.html')
+    return render_template('register_facility.html', countries=countries)
 
 @app.route('/facility-login', methods=['GET', 'POST'])
 def facility_login():
@@ -346,9 +381,9 @@ def login():
 # Admin Dashboard Route
 @app.route('/admin')
 def admin_dashboard():
-    location = request.args.get('location')
+    country = request.args.get('country')
+    city = request.args.get('city')
     worker_type = request.args.get('worker_type')
-    facility_location = request.args.get('facility_location')
     task_status = request.args.get('task_status')
 
     # Get pagination arguments for health workers and facilities
@@ -362,12 +397,14 @@ def admin_dashboard():
     facilities_query = Facility.query
 
     # Apply filters
-    if location:
-        healthworkers_query = healthworkers_query.filter(HealthWorker.location.ilike(f"%{location}%"))
+    if country:
+        healthworkers_query = healthworkers_query.filter(HealthWorker.country.ilike(f"%{country}%"))
+        facilities_query = facilities_query.filter(Facility.country.ilike(f"%{country}%"))
+    if city:
+        healthworkers_query = healthworkers_query.filter(HealthWorker.city.ilike(f"%{city}%"))
+        facilities_query = facilities_query.filter(Facility.city.ilike(f"%{city}%"))
     if worker_type:
         healthworkers_query = healthworkers_query.filter_by(worker_type=worker_type)
-    if facility_location:
-        facilities_query = facilities_query.filter(Facility.location.ilike(f"%{facility_location}%"))
     if task_status:
         tasks = Task.query.filter_by(status=task_status).all()
         hw_ids = [task.healthworker_id for task in tasks]
@@ -490,11 +527,56 @@ def healthworker_dashboard(id):
 
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
-@app.route('/facility_dashboard/<int:facility_id>')
-@login_required
+@app.route('/facility-dashboard/<int:facility_id>', methods=['GET', 'POST'])
 def facility_dashboard(facility_id):
     facility = Facility.query.get_or_404(facility_id)
-    return render_template('facility_dashboard.html', facility=facility)
+
+    if request.method == 'POST':
+        facility.name = request.form['name']
+        facility.email = request.form['email']
+        facility.phone = request.form['phone']
+        facility.address = request.form['address']
+        facility.country = request.form['country']
+        facility.city = request.form['city']
+        
+        db.session.commit()
+        flash('Facility details updated successfully!', 'success')
+        return redirect(url_for('facility_dashboard', facility_id=facility.id))
+
+    countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", 
+                 "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", 
+                 "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", 
+                 "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", 
+                 "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", 
+                 "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the", 
+                 "Congo, Republic of the", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", 
+                 "Denmark", "Djibouti", "Dominica", "Dominican Republic", "East Timor (Timor-Leste)", 
+                 "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", 
+                 "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", 
+                 "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", 
+                 "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", 
+                 "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast", "Jamaica", "Japan", "Jordan", 
+                 "Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kosovo", 
+                 "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", 
+                 "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", 
+                 "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", 
+                 "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", 
+                 "Myanmar (Burma)", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", 
+                 "Nicaragua", "Niger", "Nigeria", "North Macedonia (formerly Macedonia)", "Norway", 
+                 "Oman", "Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", 
+                 "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", 
+                 "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", 
+                 "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", 
+                 "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", 
+                 "Somalia", "South Africa", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", 
+                 "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", 
+                 "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", 
+                 "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", 
+                 "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", 
+                 "Zambia", "Zimbabwe"]
+
+    return render_template('facility_dashboard.html', facility=facility, countries=countries)
+
 
 @app.route('/update_facility_profile/<int:facility_id>', methods=['POST'])
 @login_required
@@ -506,7 +588,8 @@ def update_facility_profile(facility_id):
         facility.email = request.form['email']
         facility.phone = request.form['phone']
         facility.address = request.form['address']
-        facility.location = request.form['location']
+        facility.country = request.form['country']
+        facility.city = request.form['city']
         
         try:
             db.session.commit()

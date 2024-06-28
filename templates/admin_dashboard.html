@@ -77,8 +77,12 @@
 
     <form class="form-inline filter-form" method="GET" action="{{ url_for('admin_dashboard') }}">
         <div class="form-group mr-3">
-            <label for="location">Filter by Location:</label>
-            <input type="text" class="form-control ml-2" name="location" id="location" value="{{ request.args.get('location') }}">
+            <label for="country">Filter by country:</label>
+            <input type="text" class="form-control ml-2" name="country" id="country" value="{{ request.args.get('country') }}">
+        </div>
+        <div class="form-group mr-3">
+            <label for="city">Filter by city:</label>
+            <input type="text" class="form-control ml-2" name="city" id="city" value="{{ request.args.get('city') }}">
         </div>
 
         <div class="form-group mr-3">
@@ -100,11 +104,6 @@
         </div>
 
         <div class="form-group mr-3">
-            <label for="facility_location">Filter by Facility Location:</label>
-            <input type="text" class="form-control ml-2" name="facility_location" id="facility_location" value="{{ request.args.get('facility_location') }}">
-        </div>
-
-        <div class="form-group mr-3">
             <label for="task_status">Filter by Task Status:</label>
             <select class="form-control ml-2" name="task_status" id="task_status">
                 <option value="">All</option>
@@ -123,7 +122,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Location</th>
+                <th>Country</th>
+                <th>City</th>
                 <th>Worker Type</th>
                 <th>Status</th>
                 <th>Action</th>
@@ -135,7 +135,8 @@
                 <td>{{ hw.name }}</td>
                 <td>{{ hw.email }}</td>
                 <td>{{ hw.phone }}</td>
-                <td>{{ hw.location }}</td>
+                <td>{{ hw.country }}</td>
+                <td>{{ hw.city }}</td>
                 <td>{{ hw.worker_type }}</td>
                 <td>{{ hw.status }}</td>
                 <td>
@@ -175,6 +176,7 @@
             <span>Next</span>
         {% endif %}
     </div>                
+
     <h2>Facilities</h2>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
@@ -182,7 +184,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Location</th>
+                <th>Country</th>
+                <th>City</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -192,7 +195,8 @@
                 <td>{{ facility.name }}</td>
                 <td>{{ facility.email }}</td>
                 <td>{{ facility.phone }}</td>
-                <td>{{ facility.location }}</td>
+                <td>{{ facility.country }}</td>
+                <td>{{ facility.city }}</td>
                 <td>
                     <form method="POST" action="{{ url_for('create_invoice', id=facility.id) }}" style="display:inline;">
                         <button type="submit" class="btn btn-info btn-sm">Send Invoice</button>
@@ -207,29 +211,29 @@
     </table>
 
     <div class="pagination">
-        {% if pagination_hw.has_prev %}
-            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.prev_num) }}">Previous</a>
+        {% if pagination_facilities.has_prev %}
+            <a href="{{ url_for('admin_dashboard', page_facility=pagination_facilities.prev_num) }}">Previous</a>
         {% else %}
             <span>Previous</span>
         {% endif %}
         
-        {% for page_num in pagination_hw.pages %}
+        {% for page_num in pagination_facilities.pages %}
             {% if page_num %}
-                {% if page_num == pagination_hw.page %}
+                {% if page_num == pagination_facilities.page %}
                     <span class="current">{{ page_num }}</span>
                 {% else %}
-                    <a href="{{ url_for('admin_dashboard', page_hw=page_num) }}">{{ page_num }}</a>
+                    <a href="{{ url_for('admin_dashboard', page_facility=page_num) }}">{{ page_num }}</a>
                 {% endif %}
             {% else %}
                 <span>...</span>
             {% endif %}
         {% endfor %}
         
-        {% if pagination_hw.has_next %}
-            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.next_num) }}">Next</a>
+        {% if pagination_facilities.has_next %}
+            <a href="{{ url_for('admin_dashboard', page_facility=pagination_facilities.next_num) }}">Next</a>
         {% else %}
             <span>Next</span>
         {% endif %}
-    </div>         
+    </div>
 </div>
 {% endblock %}
