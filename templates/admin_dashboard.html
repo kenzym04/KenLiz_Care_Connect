@@ -17,6 +17,59 @@
     .table tbody + tbody {
         border-top: 2px solid #dee2e6;
     }
+    .btn-info {
+        background-color: #17a2b8;
+        border-color: #17a2b8;
+    }
+    .btn-info:hover {
+        background-color: #138496;
+        border-color: #117a8b;
+    }
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+    .pagination a, .pagination span {
+        margin: 0 5px;
+        padding: 10px 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #007bff;
+    }
+    .pagination a:hover {
+        background-color: #e9ecef;
+    }
+    .pagination .current {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
 </style>
 
 <div class="container">
@@ -86,7 +139,9 @@
                 <td>{{ hw.worker_type }}</td>
                 <td>{{ hw.status }}</td>
                 <td>
-                    <a href="{{ url_for('assign_task', healthworker_id=hw.id) }}" class="btn btn-info btn-sm">Assign Task</a>
+                    <form method="POST" action="{{ url_for('assign_task', healthworker_id=hw.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm">Assign Task</button>
+                    </form>
                     <form method="POST" action="{{ url_for('delete_healthworker', id=hw.id) }}" style="display:inline;">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
@@ -95,7 +150,31 @@
             {% endfor %}
         </tbody>
     </table>
-
+    <div class="pagination">
+        {% if pagination_hw.has_prev %}
+            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.prev_num) }}">Previous</a>
+        {% else %}
+            <span>Previous</span>
+        {% endif %}
+        
+        {% for page_num in pagination_hw.pages %}
+            {% if page_num %}
+                {% if page_num == pagination_hw.page %}
+                    <span class="current">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('admin_dashboard', page_hw=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination_hw.has_next %}
+            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.next_num) }}">Next</a>
+        {% else %}
+            <span>Next</span>
+        {% endif %}
+    </div>                
     <h2>Facilities</h2>
     <table class="table table-bordered table-hover">
         <thead class="thead-dark">
@@ -115,7 +194,9 @@
                 <td>{{ facility.phone }}</td>
                 <td>{{ facility.location }}</td>
                 <td>
-                    <a href="{{ url_for('create_invoice', id=facility.id) }}" class="btn btn-info btn-sm">Send Invoice</a>
+                    <form method="POST" action="{{ url_for('create_invoice', id=facility.id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-info btn-sm">Send Invoice</button>
+                    </form>
                     <form method="POST" action="{{ url_for('delete_facility', id=facility.id) }}" style="display:inline;">
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
@@ -124,5 +205,31 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <div class="pagination">
+        {% if pagination_hw.has_prev %}
+            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.prev_num) }}">Previous</a>
+        {% else %}
+            <span>Previous</span>
+        {% endif %}
+        
+        {% for page_num in pagination_hw.pages %}
+            {% if page_num %}
+                {% if page_num == pagination_hw.page %}
+                    <span class="current">{{ page_num }}</span>
+                {% else %}
+                    <a href="{{ url_for('admin_dashboard', page_hw=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% else %}
+                <span>...</span>
+            {% endif %}
+        {% endfor %}
+        
+        {% if pagination_hw.has_next %}
+            <a href="{{ url_for('admin_dashboard', page_hw=pagination_hw.next_num) }}">Next</a>
+        {% else %}
+            <span>Next</span>
+        {% endif %}
+    </div>         
 </div>
 {% endblock %}

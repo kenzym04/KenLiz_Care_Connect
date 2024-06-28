@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_paginate import Pagination, get_page_args
 from flask_login import LoginManager, UserMixin, login_required
 from models import Facility
 from sqlalchemy.orm import relationship
@@ -342,7 +343,7 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-    # Admin Dashboard Route
+# Admin Dashboard Route
 @app.route('/admin')
 def admin_dashboard():
     location = request.args.get('location')
@@ -350,21 +351,44 @@ def admin_dashboard():
     facility_location = request.args.get('facility_location')
     task_status = request.args.get('task_status')
 
-    healthworkers = HealthWorker.query.all()
-    facilities = Facility.query.all()
+    # Get pagination arguments for health workers and facilities
+    page_hw, per_page_hw, offset_hw = get_page_args(page_parameter='page_hw', per_page_parameter='per_page_hw')
+    page_facility, per_page_facility, offset_facility = get_page_args(page_parameter='page_facility', per_page_parameter='per_page_facility')
+    per_page_hw = 50
+    per_page_facility = 50
+
+    # Query health workers and facilities
+    healthworkers_query = HealthWorker.query
+    facilities_query = Facility.query
 
     # Apply filters
     if location:
-        healthworkers = [hw for hw in healthworkers if hw.location == location]
+        healthworkers_query = healthworkers_query.filter(HealthWorker.location.ilike(f"%{location}%"))
     if worker_type:
-        healthworkers = [hw for hw in healthworkers if hw.worker_type == worker_type]
+        healthworkers_query = healthworkers_query.filter_by(worker_type=worker_type)
     if facility_location:
-        facilities = [f for f in facilities if f.location == facility_location]
+        facilities_query = facilities_query.filter(Facility.location.ilike(f"%{facility_location}%"))
     if task_status:
         tasks = Task.query.filter_by(status=task_status).all()
-        healthworkers = [hw for hw in healthworkers if any(task.healthworker_id == hw.id for task in tasks)]
+        hw_ids = [task.healthworker_id for task in tasks]
+        healthworkers_query = healthworkers_query.filter(HealthWorker.id.in_(hw_ids))
 
-    return render_template('admin_dashboard.html', healthworkers=healthworkers, facilities=facilities)
+    # Apply pagination
+    healthworkers = healthworkers_query.offset(offset_hw).limit(per_page_hw).all()
+    facilities = facilities_query.offset(offset_facility).limit(per_page_facility).all()
+
+    total_hw = healthworkers_query.count()
+    total_facilities = facilities_query.count()
+
+    # Create pagination objects
+    pagination_hw = Pagination(page=page_hw, per_page=per_page_hw, total=total_hw, css_framework='bootstrap4')
+    pagination_facilities = Pagination(page=page_facility, per_page=per_page_facility, total=total_facilities, css_framework='bootstrap4')
+
+    return render_template('admin_dashboard.html',
+                           healthworkers=healthworkers,
+                           facilities=facilities,
+                           pagination_hw=pagination_hw,
+                           pagination_facilities=pagination_facilities)
 
 # Assign Task Route
 @app.route('/assign_task/<int:healthworker_id>', methods=['GET', 'POST'])

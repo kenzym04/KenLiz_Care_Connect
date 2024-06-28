@@ -38,6 +38,15 @@ class Facility(db.Model):
     
     def is_facility(self):
         return True  # You would implement your own logic here based on your requirements
+    
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200), nullable=False)
+    status = db.Column(db.String(50), nullable=False)
+    healthworker_id = db.Column(db.Integer, db.ForeignKey('health_worker.id'), nullable=False)
+    healthworker = db.relationship('HealthWorker', back_populates='tasks')
+
+HealthWorker.tasks = db.relationship('Task', order_by=Task.id, back_populates='healthworker')
 
 # Initialize Flask-Migrate
 migrate = Migrate()

@@ -13,4 +13,5 @@ SQLAlchemy==2.0.30
 typing_extensions==4.12.1
 Werkzeug==3.0.3
 Flask-Mail
+flask_paginate==2024.4.12
 
