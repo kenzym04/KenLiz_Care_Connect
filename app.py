@@ -466,7 +466,8 @@ def healthworker_dashboard(id):
 
     return render_template('healthworker_dashboard.html', healthworker=healthworker)
 
-@app.route('/facility-dashboard/<int:facility_id>')
+@app.route('/facility_dashboard/<int:facility_id>')
+@login_required
 def facility_dashboard(facility_id):
     facility = Facility.query.get_or_404(facility_id)
     return render_template('facility_dashboard.html', facility=facility)
@@ -562,6 +563,22 @@ def unassign_healthworker(healthworker_id):
         print(str(e))
     
     return redirect(url_for('healthworker_dashboard', id=healthworker.id))
+
+@app.route('/privacy-policy')
+def privacy_policy():
+    return render_template('privacy_policy.html')
+
+@app.route('/sitemap')
+def sitemap():
+    return render_template('sitemap.html')
+
+@app.route('/contact-us', methods=['GET', 'POST'])
+def contact_us():
+    if request.method == 'POST':
+        # Handle form submission here
+        flash('Thank you for contacting us!', 'success')
+        return redirect(url_for('contact_us'))
+    return render_template('contact_us.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

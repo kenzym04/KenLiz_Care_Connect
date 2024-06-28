@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - MediConnect International{% endblock %}
+
+{% block content %}
+<style>
+    .content-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    small {
+        color: blue;
+    }
+
+    .content-container h2 {
+        color: #006400;
+        margin-bottom: 20px;
+    }
+
+    .content-container p {
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .contact-form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .contact-form .btn {
+        background-color: #006400;
+        color: white;
+    }
+
+    .contact-form .btn:hover {
+        background-color: #004d00;
+    }
+</style>
+
+<div class="container mt-5 mb-5 content-container">
+    <h2>Contact Us</h2>
+    <br><p></p>Phone Number: <small>+254798200098 +254754254204</small>
+    <p>Email: <small>info@mediconnectinternational.com</small></p></br>
+    <p>If you have any questions or need further information, please feel free to contact us using the form below.</p>
+    <form class="contact-form" method="POST" action="{{ url_for('contact_us') }}">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

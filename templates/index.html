@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home - MediConnect International{% endblock %}
+{% block title %}Home - KenMed Connect{% endblock %}
 
 {% block content %}
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
@@ -12,7 +12,7 @@
 
     header {
         background-color: #ffffff; /* Green header */
-        padding: 15px;
+        padding: 5px;
         display: flex;
         align-items: center;
         text-align: center;
@@ -173,7 +173,7 @@
 <body>
     <header>
         <img src="{{ url_for('static', filename='images/logo.png') }}" alt="KenLiz CareConnect Logo">
-        <h1>Welcome to MediConnect International</h1>
+        <h1>Welcome to KenMed Connect</h1>
     </header>
 
     <section>
@@ -181,23 +181,23 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="intro-text">
-                        <img src="{{ url_for('static', filename='images/health_professionals-transformed.jpeg') }}" alt="Intro Image" class="img-fluid mb-3">
-                        <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
-                    </div>
-                    <div class="registration-card">
-                        <h3>Register as a Healthcare Facility or Home/Patient</h3>
-                        <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
-                        <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
+                            <p>Enhance your healthcare services by partnering with us. We provide certified health professionals for both health facilities and private homes, ensuring exceptional care tailored to your specific needs. Experience top-notch service and reliability with our dedicated professionals.</p>
+                            <img src="{{ url_for('static', filename='images/health_professionals-transformed.jpeg') }}" alt="Intro Image" class="img-fluid mb-3">    
+                            <div class="registration-card">
+                            <h3>Register as a Healthcare Facility/Home</h3>
+                            <p>Partner with us for certified health professionals in both facilities and homes, ensuring exceptional and reliable care.</p>
+                            <a href="{{ url_for('register_facility') }}" class="btn btn-primary">Register Now</a>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="career-text">
                         <p>We offer rewarding work opportunities for health professionals seeking to make a meaningful impact. Join our team to explore fulfilling career paths and contribute to elevating care standards in diverse settings. Enhance your career while making a difference in the lives of those you serve.</p>
-                    </div>
-                    <div class="registration-card">
+                        <div class="registration-card">
                         <h3>Register as a Healthcare Worker</h3>
                         <p>Join us for rewarding opportunities and professional growth while making a meaningful impact in healthcare.</p>
                         <a href="{{ url_for('register_healthworker') }}" class="btn btn-primary">Register Now</a>
+                        </div>
                     </div>
                     <img src="{{ url_for('static', filename='images/healthcare-transformed.jpeg') }}" alt="Career Image" class="img-fluid mb-3">
                 </div>
@@ -225,12 +225,12 @@
     <footer>
         <div class="container footer-content">
             <div class="footer-links">
-                <a href="#">Privacy Policy</a> | 
-                <a href="#">Sitemap</a> | 
-                <a href="#">Contact Us</a>
+                <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a> | 
+                <a href="{{ url_for('sitemap') }}">Sitemap</a> | 
+                <a href="{{ url_for('contact_us') }}">Contact Us</a>
             </div>
             <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="https://web.facebook.com/profile.php?id=61561356397944&viewas=&show_switched_toast=false&show_switched_tooltip=false&is_tour_dismissed=false&is_tour_completed=false&show_podcast_settings=false&show_community_review_changes=false&should_open_composer=false&badge_type=NEW_MEMBER&show_community_rollback_toast=false&show_community_rollback=false&show_follower_visibility_disclosure=false&bypass_exit_warning=true" target="_blank"><i class="fab fa-facebook"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -239,7 +239,7 @@
             </div>
         </div>
         <div class="container text-center">
-            <p>&copy; 2024 MediConnect International, Inc.</p>
+            <p>&copy; 2024 KenMed Connect, Inc.</p>
         </div>
     </footer>
 

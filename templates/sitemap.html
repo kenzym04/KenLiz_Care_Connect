@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Sitemap - MediConnect International{% endblock %}
+
+{% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .content-container {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .content-container h2 {
+        color: #006400;
+        margin-bottom: 20px;
+    }
+
+    .content-container ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .content-container ul li {
+        margin-bottom: 10px;
+    }
+
+    .content-container ul li a {
+        color: #006400;
+        text-decoration: none;
+    }
+
+    .content-container ul li a:hover {
+        text-decoration: underline;
+    }
+</style>
+<body>
+<div class="container mt-5 mb-5 content-container">
+    <h2>Sitemap</h2>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('register_facility') }}">Register as a Facility</a></li>
+        <li><a href="{{ url_for('register_healthworker') }}">Register as a Healthcare Worker</a></li>
+        <li><a href="{{ url_for('privacy_policy') }}">Privacy Policy</a></li>
+        <li><a href="{{ url_for('sitemap') }}">Sitemap</a></li>
+        <li><a href="{{ url_for('contact_us') }}">Contact Us</a></li>
+    </ul>
+</div>
+
+{% endblock %}
