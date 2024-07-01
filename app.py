@@ -258,8 +258,7 @@ def register_healthworker():
             cv=cv_filename,
             certifications=', '.join(certifications_filenames),
             photo=photo_filename,
-            country=request.form['country'],
-            city=request.form['city'],
+            location=request.form['location'],
             password_hash=generate_password_hash(password)
         )
         

@@ -16,6 +16,9 @@
     .form-control {
         border-radius: 0.25rem;
     }
+    span {
+        color: red;
+    }
 
     .btn-primary {
         background-color: #007bff;
@@ -40,19 +43,19 @@
     <h2 class="text-center mb-4">Register as a Facility or Private Home</h2>
     <form method="POST" action="{{ url_for('register_facility') }}">
         <div class="form-group mb-3">
-            <label for="name">Facility Name:</label>
+            <label for="name">Facility Name: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="name" name="name" maxlength="100" required>
         </div>
         <div class="form-group mb-3">
-            <label for="email">Email:</label>
+            <label for="email">Email: <span class="text-danger">*</span></label>
             <input type="email" class="form-control" id="email" name="email" maxlength="64" required>
         </div>
         <div class="form-group mb-3">
-            <label for="phone">Phone Number: <small class="form-text">Kindly use international format (e.g., +1234567890).</small></label>
+            <label for="phone">Phone Number: <span class="text-danger">* </span><small class="form-text">Kindly use international format (e.g., +1234567890).</small></label>
             <input type="text" class="form-control" id="phone" name="phone" placeholder="+1234567890" maxlength="25" required>
         </div>
         <div class="form-group mb-3">
-            <label for="address">Address:</label>
+            <label for="address">Address: <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="address" name="address" maxlength="255" required>
         </div>
         <div class="form-group mb-3">
@@ -71,11 +74,11 @@
             </select>
         </div>
         <div class="form-group mb-3">
-            <label for="password">Password:</label>
+            <label for="password">Password: <span class="text-danger">*</span></label>
             <input type="password" class="form-control" id="password" name="password" maxlength="64" required>
         </div>
         <div class="form-group mb-3">
-            <label for="confirm_password">Confirm Password:</label>
+            <label for="confirm_password">Confirm Password: <span class="text-danger">*</span></label>
             <input type="password" class="form-control" id="confirm_password" name="confirm_password" maxlength="64" required>
         </div>
         <div class="form-group text-center">
